@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="resources/css/styles.css" />
+    <script src="vendors/CanvasInput files/CanvasInput.js" defer></script> 
+    <script src="vendors/jQuery.js" defer></script>
+    <script src="resources/js/app.js" defer></script>
+    <title>StatMod</title>
+  </head>
+
+  <body>
+   <div>
+    <h1>StatMod - Nem modellering af statiske modeller</h1>
+
+    <h3>Simpelt understøttet bjælke</h3>
+    <div id="spanLengthInputDiv">
+      <p>
+      <label for="spanLengthId">Spændvidde:</label>
+        <input
+        type="number";
+        class="spanInput noSpinners"
+        id="spanLengthId";
+        placeholder="1,0";
+        >
+        m
+        <button type="button" class="btn1" id="tegnBtn">Opdater</button>
+      </p>
+        <div class="settingsIconContainer">
+          <img id="spanSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" id="spanSettingsIcon">
+          <div id="spanSettingsModal" class="settingsModal pseudoHidden" >
+            <label for="manualScaleCheckbox">Indstil horisontal skala manuelt</label>
+            <input type="checkbox" id="manualScaleCheckbox">
+            <div id="spanScaleSettings" class="hidden">
+              <!-- <p>Justér horisontal skala</p> -->
+              <input type="number" id="horizontalScale" class="noSpinners scaleInput">
+              <div class="slideContainer">
+                <input id="horizontalScaleSlider" type="range" min="1" max="1000" value="200" class="slider">
+              </div>
+            </div>
+              <div class="exitIconContainer">
+                <img id="spanSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
+            </div>
+          </div>
+        </div>
+    </div>
+    </div>
+
+    <div>
+    <h3>Laster</h3>
+    <h4>Linjelaster</h4>
+    <input type="button" class="btn1" value="Tilføj jævnt fordelt linjelast" id="addLineLoadBtn">
+    <div id="lineLoadDiv"></div>
+    <h4>Punktlaster</h2>
+    <input type="button" class="btn1" value="Tilføj punktlast" id="addPointLoadBtn">
+    <div id="pointLoadDiv"></div>
+  </div>
+  
+  <div>
+    <button id="drawLoadsBtn" class="hidden" value="Tegn laster">
+      <button id="clearBtn" class="hidden" value="Fjern laster">
+      </div>
+      
+      <div>
+        <img class="hidden" id="arrowPic" src="resources/data/images/arrow1.png" alt="Picture">
+      </div>
+      
+      <!-- <div class="clearBackground"></div> 
+      
+        <div class="settingsIconContainer">
+          <img src="./resources/data/images/settingsicon.png" class="settingsIcon">
+          
+          <div class="settingsModal">
+            <p>Placering af label</p>
+              <div class=labelPlacementSettings>
+                <input type="radio" name="position" class="radio1">
+                <input type="radio" name="position" class="radio2">
+                <img src="./resources/data/images/Statisk model2.png">
+                <input type="radio" name="position" class="radio3">
+                <input type="radio" name="position" class="radio4">
+              </div>
+          </div>
+        </div>-->
+      
+      
+      <div id=canvasContainer>
+        <canvas id="myCanvas"></canvas>
+      </div>
+      
+    </body>
+    
+    </html>
+    

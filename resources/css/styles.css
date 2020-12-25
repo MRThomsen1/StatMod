@@ -1,0 +1,428 @@
+* {
+  box-sizing: border-box;
+}
+
+canvas {
+  display: block;
+  position: absolute;
+  /* left: 300px; */
+  /* top: 80px; */
+  border: 1px solid #000000;
+  background-color: white;
+  z-index: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&display=swap');
+
+body {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: #5d9fbdbe; 
+  /* background-color: #8a8a8a; */
+  margin-left: 20px;
+}
+
+h3 {
+  margin: 0px;
+  font-size: 18px;
+}
+
+h4 {
+  margin: 10px 0px 0px;
+  font-size: 14px;
+}
+
+p {
+  margin: 5px;
+  font-size: 14px;
+}
+
+.btn1 {
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+background-color: rgba(190, 190, 190, 0.596);
+border: none;
+border-radius: 5px;
+padding: 2px 5px;
+cursor: pointer;
+outline: none;
+transition: 0.2s all;
+}
+
+.btn1:active {
+  transform: scale(0.96);
+  box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.24);
+  /* background-color: rgb(145, 145, 145); */
+}
+
+#spanLengthInputDiv {
+  display: block;
+  position: relative;
+  max-width: 270px;
+}
+
+#spanLengthInputDiv .settingsIconContainer {
+  display: block;
+  position: absolute;
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  top: 1px;
+  right: 10px;
+}
+
+#spanLengthInputDiv #spanSettingsIcon {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+#spanLengthInputDiv #spanSettingsIcon:active {
+  transform: scale(0.96);
+  box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.24);
+}
+
+.settingsModal {
+  background-color: #87b7ce;
+  color:#000000;
+  position: absolute;
+  left: 23px;
+  top: 0px;
+  z-index: 9;
+  border: 1px solid black;
+  border-radius: 6px;
+  transition-property: opacity, visibility;
+  transition-duration: 0.3s, 0s;
+  transition-delay: 0s;  
+}
+
+#spanSettingsModal {
+  width: 18rem;
+  
+}
+
+#manualScaleCheckbox {
+  position: relative;
+  top: 2px;
+}
+
+.settingsModal p {
+  font-size: 12px;
+  padding-left: 5px;
+  margin-left: 0px;
+}
+
+.settingsModal .scaleInput {
+  width: 15%;
+  margin-left: 5px;
+  margin-top: 2px;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  border: 1px solid;
+  text-align: right;
+  float: left;
+}
+
+.settingsModal .scaleInput:focus {
+  outline: none;
+}
+
+.settingsModal .slideContainer {
+  display: inline-block;
+  width: 82%;
+}
+
+.settingsModal .slideContainer .slider {
+  width: 100%; /* Full-width */
+  height: 5px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+.settingsModal .slideContainer .slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+#lineLoadDiv {
+  display: block;
+  max-width: 270px;
+}
+
+.lineLoadDiv {
+  display: block;
+  position: relative;
+  background: #5d9fbdd5;
+  /* background: #727272; */
+  border-radius: 10px;
+  padding-left: 0px;
+  padding-right: 5px;
+  margin: 5px auto 2.5px;
+}
+
+.lineLoadDiv h5 {
+  padding-top: 5px;
+  margin: 0px 0px 10px 5px;
+}
+
+.lineLoadDiv label {
+  font-size: 14px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.lineLoadDiv p {
+  font-size: 14px;
+  margin-left: 0px;
+}
+
+.lineLoadDiv input[type=number]{
+  
+  font-family: sans-serif;
+  background:#b4b4b457;
+  border: none;
+}
+
+.lineLoadDiv input[type=number]:focus {
+  background: #d1d1d1;
+  outline: none;
+}
+
+.lineLoadDiv input[type=number]::placeholder {
+  color: rgb(0, 0, 0);
+}
+
+.lineLoadDiv .settingsIconContainer {
+  display: block;
+  position: absolute;
+  background: #ffffff2a;
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  top: 5px;
+  right: 10px;
+}
+
+.lineLoadDiv .settingsIcon {
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.lineLoadDiv .settingsIcon:active {
+  transform: scale(0.96);
+  box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.24);
+}
+
+.lineLoadDiv .settingsModal {
+  background-color: #87b7ce;
+  color:#000000;
+  position: absolute;
+  left: 35px;
+  top: -5px;
+  width: 18rem;
+  height: 6rem;
+  z-index: 9;
+  border: 1px solid black;
+  border-radius: 6px;
+}
+
+.lineLoadDiv .settingsModal p {
+  padding-top: 2px;
+  padding-left: 15px;
+}
+
+.settingsModal .exitIconContainer {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  height: 10px;
+  width: 10px;
+  z-index: 13;
+}
+
+.settingsModal .exitIconContainer img {
+  height: 10px;
+  width: 10px;
+  z-index: 13;
+  cursor: pointer;
+}
+
+.labelPlacementSettings {
+  display: block;
+  position: relative;
+  margin: 0 auto;
+  /* background-color: rgb(163, 163, 163); */
+  max-height: 4.5rem;
+  border-radius: 4px;
+  width: 16rem;
+  z-index: 10;
+}
+
+.labelPlacementSettings img {
+  display: block;
+  position: relative;
+  max-width: 16rem;
+  height: 3.8rem;
+  margin: 0.25rem auto;
+  padding: 0 1rem
+  /* margin-left: 1.5rem; */
+  /* margin-top: auto; */
+}
+
+.labelPlacementSettings input[type=radio] {
+  display: inline-block;
+  position: absolute;
+  margin: 0.1rem 0.3rem;
+  z-index: 11;
+}
+
+.labelPlacementSettings .radio1 {
+  top: 0px;
+}
+.labelPlacementSettings .radio2 {
+  bottom: 1.3rem;
+}
+.labelPlacementSettings .radio3 {
+  top: 0px;
+  right: 0px;
+}
+.labelPlacementSettings .radio4 {
+  bottom: 1.3rem;
+  right: 0px;
+}
+
+.spanInput {
+  width: 40px;
+  text-align: right;
+}
+
+.loadInput {
+  width: 30px;
+  text-align: right;  
+  background: #8a8a8a;
+  border: none;
+  border-radius: 1px;
+}
+
+.loadInput:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+label[for*="heckbox"] {
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+.noSpinners{
+  -moz-appearance: textfield; /* Fjern op/ned pile i feltet (Firefox)*/
+}
+/* Fjern op/ned pile i feltet (Chrome, Safari, Edge, Opera) */
+.noSpinners::-webkit-outer-spin-button, .noSpinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.decimalSpinner {
+  width: 25px;
+  text-align: left;
+}
+
+.spinnerOpacity1::-webkit-inner-spin-button, 
+.spinnerOpacity1::-webkit-outer-spin-button {  
+    opacity: 1;
+}
+
+.scaleSpinner {
+  width: 35px;
+  text-align: left;
+  margin-left: 5px;
+}
+
+.colorPicker {
+  height: 15px;
+  width: 15px;
+  opacity: 0;
+	display: block;
+  border: none;
+  cursor: pointer;
+}
+
+.colorPickerWrapper{
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  margin-bottom: 5px;
+  border: 1px, solid; 
+  border-radius: 5px;
+}
+
+.clearBackground {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.205);
+  z-index: 8;
+}
+
+
+.whiteSpacePre {
+  white-space: pre;
+}
+
+.hidden {
+  display: none
+  }
+
+.pseudoHidden {
+  opacity: 0;
+  visibility: hidden;
+  transition-property: opacity, visibility;
+  transition-duration: 0.3s, 0s;
+  transition-delay: 0s, 0.3s;  
+}
+
+.modal {
+  position: fixed;
+  z-index: 100;
+  background: white;
+  border-radius: 10px;
+  width: 80%;
+  top: 30vh;
+  left: 10%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: none;
+}
+
+.modal.visible {
+  display: block;
+  animation: fade-slide-in 0.3s ease-out forwards;
+}
+
+.modal .modal__title {
+  margin: 0;
+  padding: 1rem;
+  border-bottom: 1px solid #00329e;
+  background: #00329e;
+  color: white;
+  border-radius: 10px 10px 0 0;
+}
+
+.modal .modal__content {
+  padding: 1rem;
+}
+
+.modal .modal__actions {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
