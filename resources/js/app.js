@@ -109,7 +109,7 @@ function setScale() {
     lineLength = setLineCoordinates(scale);
   }
   horizontalScaleInput.value = (scale / INITIALSCALE).toFixed(2);
-  horizontalScaleSlider.value = scale * INITIALSCALE/200;
+  horizontalScaleSlider.value = (scale * INITIALSCALE) / 200;
 }
 
 // Linje i statisk model tegnes
@@ -399,6 +399,7 @@ function isOdd(x) {
 }
 
 function addLineLoad() {
+  const currentIndex = lineLoads.length;
   const lineLoadObject = {
     startX: lineCoorLeftX,
     length: lineLength,
@@ -407,12 +408,12 @@ function addLineLoad() {
     color: "black",
     labelPlace: "top_right",
   };
-  if (lineLoads.length === 0) {
+  if (currentIndex === 0) {
     lineLoadObject.startY = lineCoorY - 15;
   } else {
     lineLoadObject.startY =
-      lineLoads[lineLoads.length - 1].startY -
-      lineLoads[lineLoads.length - 1].size -
+      lineLoads[currentIndex - 1].startY -
+      lineLoads[currentIndex - 1].size -
       10;
   }
   const mainDiv = document.createElement("div");
@@ -428,43 +429,41 @@ function addLineLoad() {
   const label3 = document.createElement("label");
   const numInput3 = document.createElement("input");
 
-  mainDiv.id = `lineLoadIndex${lineLoads.length}`;
+  mainDiv.id = `lineLoadIndex${currentIndex}`;
   mainDiv.classList.add("lineLoadDiv");
 
-  h5.textContent = `Linjelast #${lineLoads.length + 1}`;
-  mainDiv.appendChild(h5);
-
+  h5.textContent = `Linjelast #${currentIndex + 1}`;
+  
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
-
+  
   settingsIcon.src = "./resources/data/images/settingsicon.png";
   settingsIcon.classList.add("settingsIcon");
-
+  
   settingsIconContainer.classList.add("settingsIconContainer");
-
+  
   function toggleSettingsModal() {
     settingsModal.classList.toggle("pseudoHidden");
   }
-
+  
   settingsIcon.addEventListener("click", toggleSettingsModal);
-
+  
   settingsIconContainer.appendChild(settingsIcon);
-  mainDiv.appendChild(settingsIconContainer);
-
+ 
   // start and length inputs of load being added
-  checkbox1.id = `checkbox1ForLineLoadIndex${lineLoads.length}`;
+  checkbox1.id = `checkbox1ForLineLoadIndex${currentIndex}`;
   checkbox1.type = "checkbox";
   // checkbox1.classList.add("fullLoadCheckbox");
   checkbox1.checked = true;
   checkbox1.addEventListener("change", fullLoadCheckboxChangeHandler);
 
-  label1.htmlFor = `checkbox1ForLineLoadIndex${lineLoads.length}`;
+  label1.htmlFor = `checkbox1ForLineLoadIndex${currentIndex}`;
   label1.textContent = "Last over hele modellens længde?";
 
-  subDiv1.id = `subDiv1Index${lineLoads.length}`;
+  subDiv1.id = `subDiv1LineLoadIndex${currentIndex}`;
   subDiv1.classList.add("hidden");
 
-  numInput2.id = `numInput2ForLineLoadIndex${lineLoads.length}`;
+  numInput2.id = `numInput2ForLineLoadIndex${currentIndex}`;
   numInput2.type = "number";
   numInput2.placeholder = "0,0";
   numInput2.classList.add("numInput");
@@ -472,10 +471,10 @@ function addLineLoad() {
   numInput2.classList.add("noSpinners");
   numInput2.addEventListener("change", updateLineLoadStart);
 
-  label2.htmlFor = `numInput2ForLineLoadIndex${lineLoads.length}`;
+  label2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
   label2.textContent = "Start: ";
 
-  numInput3.id = `numInput3ForLineLoadIndex${lineLoads.length}`;
+  numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
   numInput3.placeholder = `${spanLengthDecimal}`;
   numInput3.classList.add("numInput");
@@ -483,7 +482,7 @@ function addLineLoad() {
   numInput3.classList.add("noSpinners");
   numInput3.addEventListener("change", updateLineLoadLength);
 
-  label3.htmlFor = `numInput3ForLineLoadIndex${lineLoads.length}`;
+  label3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
   label3.textContent = "Udbredelse: ";
 
   paragraph1.classList.add("smallFont");
@@ -510,7 +509,7 @@ function addLineLoad() {
 
   paragraph2.classList = "whiteSpacePre";
 
-  loadSizeInput.id = `loadSizeInputIndex${lineLoads.length}`;
+  loadSizeInput.id = `loadSizeInputLineLoadIndex${currentIndex}`;
   loadSizeInput.type = "number";
   // loadSizeInput.placeholder = `${spanLengthDecimal}`;
   loadSizeInput.classList.add("numInput");
@@ -523,13 +522,13 @@ function addLineLoad() {
   loadSizeInput.addEventListener("change", updateLoadSizes);
 
   const loadScaleInput = document.createElement("input");
-  loadScaleInput.id = `loadScaleInputIndex${lineLoads.length}`;
+  loadScaleInput.id = `loadScaleInputLineLoadIndex${currentIndex}`;
   loadScaleInput.type = "number";
-  if (lineLoads.length === 0) {
+  if (currentIndex === 0) {
     loadScaleInput.valueAsNumber = 10;
   } else {
     loadScaleInput.valueAsNumber = document.getElementById(
-      `loadScaleInputIndex${lineLoads.length - 1}`
+      `loadScaleInputLineLoadIndex${currentIndex - 1}`
     ).valueAsNumber;
   }
   loadScaleInput.classList.add("numInput");
@@ -537,7 +536,7 @@ function addLineLoad() {
   loadScaleInput.classList.add("spinnerOpacity1");
   loadScaleInput.addEventListener("change", updateLoadSizes);
 
-  // numOfDecimalsOnLoad.id = `numOfDecimalsOnLoadIndex${lineLoads.length}`;
+  // numOfDecimalsOnLoad.id = `numOfDecimalsOnLoadIndex${currentIndex}`;
   // numOfDecimalsOnLoad.type = "number";
   // numOfDecimalsOnLoad.classList.add("decimalSpinner");
   // numOfDecimalsOnLoad.value = 1;
@@ -566,13 +565,13 @@ function addLineLoad() {
   const loadColorPickerLabel = document.createElement("label");
 
   loadColorPicker.type = "color";
-  loadColorPicker.id = `loadColorIndex${lineLoads.length}`;
+  loadColorPicker.id = `loadColorLineLoadIndex${currentIndex}`;
   loadColorPicker.classList.add("colorPicker");
   loadColorPicker.value = "black";
   loadColorPicker.style.backgroundColor = loadColorPicker.value;
   loadColorPicker.addEventListener("change", updateLoadColor);
 
-  loadColorPickerWrapper.id = `loadColorPickerWrapperIndex${lineLoads.length}`;
+  loadColorPickerWrapper.id = `loadColorPickerWrapperLineLoadIndex${currentIndex}`;
   loadColorPickerWrapper.classList.add("colorPickerWrapper");
   loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
 
@@ -595,7 +594,7 @@ function addLineLoad() {
   const exitIconContainer = document.createElement("div");
   const exitIcon = document.createElement("img");
 
-  settingsModal.id = `settingsModalIndex${lineLoads.length}`;
+  settingsModal.id = `settingsModalLineLoadIndex${currentIndex}`;
   settingsModal.classList.add("settingsModal");
   settingsModal.classList.add("pseudoHidden");
   labelPlacementText.textContent = "Placering af label";
@@ -650,8 +649,20 @@ function addLineLoad() {
   exitIconContainer.appendChild(exitIcon);
   settingsModal.appendChild(exitIconContainer);
 
-  // adding button for drawing loads
+  const deleteLoadBtn = document.createElement("button");
+  deleteLoadBtn.classList.add("btn1");
+  deleteLoadBtn.classList.add("deleteLoadButton");
+  deleteLoadBtn.textContent = "Slet linjelast";
+  deleteLoadBtn.addEventListener("click", function () {
+    reduceIndexInLineLoads(currentIndex);
+    lineLoads.splice(currentIndex, 1);
+    mainDiv.parentNode.removeChild(mainDiv);
+    updateLoadDrawings();
+  });
 
+  mainDiv.appendChild(h5);
+  mainDiv.appendChild(deleteLoadBtn);
+  mainDiv.appendChild(settingsIconContainer);
   mainDiv.appendChild(form);
 
   lineLoadDiv.appendChild(mainDiv);
@@ -664,7 +675,9 @@ function updateLoadDrawings() {
   clearLoads();
   for (let i = 0; i < lineLoads.length; i++) {
     if (
-      isNaN(document.getElementById(`loadSizeInputIndex${i}`).valueAsNumber)
+      isNaN(
+        document.getElementById(`loadSizeInputLineLoadIndex${i}`).valueAsNumber
+      )
     ) {
       continue;
     }
@@ -682,8 +695,8 @@ function updateLoadDrawings() {
 function updateLoadSizes() {
   for (let i = 0; i < lineLoads.length; i++) {
     lineLoads[i].size =
-      document.getElementById(`loadSizeInputIndex${i}`).valueAsNumber *
-      document.getElementById(`loadScaleInputIndex${i}`).valueAsNumber *
+      document.getElementById(`loadSizeInputLineLoadIndex${i}`).valueAsNumber *
+      document.getElementById(`loadScaleInputLineLoadIndex${i}`).valueAsNumber *
       1.5;
     if (i !== 0 && lineLoads[i - 1].size !== 0) {
       lineLoads[i].startY =
@@ -698,9 +711,13 @@ function fullLoadCheckboxChangeHandler() {
     if (document.getElementById(`checkbox1ForLineLoadIndex${i}`).checked) {
       lineLoads[i].startX = lineCoorLeftX;
       lineLoads[i].length = lineLength;
-      document.getElementById(`subDiv1Index${i}`).classList.add("hidden");
+      document
+        .getElementById(`subDiv1LineLoadIndex${i}`)
+        .classList.add("hidden");
     } else {
-      document.getElementById(`subDiv1Index${i}`).classList.remove("hidden");
+      document
+        .getElementById(`subDiv1LineLoadIndex${i}`)
+        .classList.remove("hidden");
     }
   }
   updateLoadDrawings();
@@ -744,11 +761,13 @@ function updateLineLoadLength() {
 
 function updateLoadColor() {
   for (let i = 0; i < lineLoads.length; i++) {
-    lineLoads[i].color = document.getElementById(`loadColorIndex${i}`).value;
+    lineLoads[i].color = document.getElementById(
+      `loadColorLineLoadIndex${i}`
+    ).value;
     document.getElementById(
-      `loadColorPickerWrapperIndex${i}`
+      `loadColorPickerWrapperLineLoadIndex${i}`
     ).style.backgroundColor = document.getElementById(
-      `loadColorIndex${i}`
+      `loadColorLineLoadIndex${i}`
     ).value;
   }
   updateLoadDrawings();
@@ -757,7 +776,7 @@ function updateLoadColor() {
 function addLineLoadLabel() {
   for (let i = 0; i < lineLoads.length; i++) {
     numberOfDecimals = 1;
-    const loadInput = document.getElementById(`loadSizeInputIndex${i}`)
+    const loadInput = document.getElementById(`loadSizeInputLineLoadIndex${i}`)
       .valueAsNumber;
     if (isNaN(loadInput)) {
       continue;
@@ -799,8 +818,32 @@ function adjustHorizontalScale() {
   updateLoadDrawings();
 }
 
-function reduceIndexInLineLoads (deletedIndex) {
-
+function reduceIndexInLineLoads(deletedIndex) {
+  const lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex'");
+  const startingIndex = deletedIndex + 1;
+  for (let element of lineLoadIds) {
+    let id = element.id;
+    let idText;
+    let idIndex;
+    if (!isNaN(parseInt(id.slice(-3)))) {
+      idText = id.slice(0, -3);
+      idIndex = id.slice(-3);
+    } else if (!isNaN(parseInt(id.slice(-2)))) {
+      idText = id.slice(0, -2);
+      idIndex = id.slice(-2);
+    } else if (!isNaN(parseInt(id.slice(-1)))) {
+      idText = id.slice(0, -1);
+      idIndex = id.slice(-1);
+    }
+    if (idIndex < startingIndex) {
+      continue;
+    }
+    newIdIndex = idIndex - 1;
+    if (idText === "lineLoadIndex") {
+      element.firstChild.innerHTML = `Linjelast #${idIndex}`;
+    }
+    element.id = idText + newIdIndex;
+  }
 }
 
 // function changeDecimals(id, value)

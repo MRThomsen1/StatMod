@@ -172,6 +172,13 @@ transition: 0.2s all;
   margin: 0px 0px 10px 5px;
 }
 
+.deleteLoadButton {
+  position: absolute;
+  font-size: 11px;
+  top: 5px;
+  right: 13%;
+}
+
 .lineLoadDiv label {
   font-size: 14px;
   padding-left: 5px;
