@@ -467,6 +467,7 @@ function addLineLoad() {
   numInput2.id = `numInput2ForLineLoadIndex${lineLoads.length}`;
   numInput2.type = "number";
   numInput2.placeholder = "0,0";
+  numInput2.classList.add("numInput");
   numInput2.classList.add("loadInput");
   numInput2.classList.add("noSpinners");
   numInput2.addEventListener("change", updateLineLoadStart);
@@ -477,6 +478,7 @@ function addLineLoad() {
   numInput3.id = `numInput3ForLineLoadIndex${lineLoads.length}`;
   numInput3.type = "number";
   numInput3.placeholder = `${spanLengthDecimal}`;
+  numInput3.classList.add("numInput");
   numInput3.classList.add("loadInput");
   numInput3.classList.add("noSpinners");
   numInput3.addEventListener("change", updateLineLoadLength);
@@ -511,6 +513,7 @@ function addLineLoad() {
   loadSizeInput.id = `loadSizeInputIndex${lineLoads.length}`;
   loadSizeInput.type = "number";
   // loadSizeInput.placeholder = `${spanLengthDecimal}`;
+  loadSizeInput.classList.add("numInput");
   loadSizeInput.classList.add("loadInput");
   loadSizeInput.classList.add("noSpinners");
 
@@ -529,6 +532,7 @@ function addLineLoad() {
       `loadScaleInputIndex${lineLoads.length - 1}`
     ).valueAsNumber;
   }
+  loadScaleInput.classList.add("numInput");
   loadScaleInput.classList.add("scaleSpinner");
   loadScaleInput.classList.add("spinnerOpacity1");
   loadScaleInput.addEventListener("change", updateLoadSizes);
@@ -793,6 +797,10 @@ function adjustHorizontalScale() {
   scale = horizontalScaleInput.valueAsNumber * INITIALSCALE;
   setSpanLength();
   updateLoadDrawings();
+}
+
+function reduceIndexInLineLoads (deletedIndex) {
+
 }
 
 // function changeDecimals(id, value)
