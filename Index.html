@@ -30,12 +30,11 @@
         <button type="button" class="btn1" id="tegnBtn">Opdater</button>
       </p>
         <div class="settingsIconContainer">
-          <img id="spanSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" id="spanSettingsIcon">
+          <img id="spanSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
           <div id="spanSettingsModal" class="settingsModal pseudoHidden" >
             <label for="manualScaleCheckbox">Indstil horisontal skala manuelt</label>
             <input type="checkbox" id="manualScaleCheckbox">
             <div id="spanScaleSettings" class="hidden">
-              <!-- <p>Justér horisontal skala</p> -->
               <input type="number" id="horizontalScale" class="noSpinners scaleInput">
               <div class="slideContainer">
                 <input id="horizontalScaleSlider" type="range" min="1" max="1000" value="200" class="slider">
@@ -49,15 +48,35 @@
     </div>
     </div>
 
-    <div>
-    <h3>Laster</h3>
-    <h4>Linjelaster</h4>
-    <input type="button" class="btn1" value="Tilføj jævnt fordelt linjelast" id="addLineLoadBtn">
-    <div id="lineLoadDiv"></div>
-    <h4>Punktlaster</h2>
-    <input type="button" class="btn1" value="Tilføj punktlast" id="addPointLoadBtn">
-    <div id="pointLoadDiv"></div>
-  </div>
+    <div id="loadsDiv">
+      <h3>Laster</h3>
+      <h4>Linjelaster</h4>
+      <div class="settingsIconContainer mainSettingsIconContainer">
+        <img id="lineLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
+        <div id="lineLoadsSettingsModal" class="settingsModal pseudoHidden" >
+          <input type="number" id="allLineLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1">
+          <div class="exitIconContainer">
+            <img id="lineLoadsSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
+          </div>
+        </div>
+      </div>
+      <br>
+      <input type="button" class="btn1" value="Tilføj jævnt fordelt linjelast" id="addLineLoadBtn">
+      <div id="lineLoadDiv"></div>
+      <h4>Punktlaster</h2>
+        <div class="settingsIconContainer mainSettingsIconContainer">
+          <img id="pointLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
+          <div id="pointLoadsSettingsModal" class="settingsModal pseudoHidden" >
+            <input type="number" id="allPointLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1">
+            <div class="exitIconContainer">
+              <img id="pointLoadsSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
+            </div>
+          </div>
+        </div>
+        <br>
+      <input type="button" class="btn1" value="Tilføj punktlast" id="addPointLoadBtn">
+      <div id="pointLoadDiv"></div>
+    </div>
   
   <div>
     <button id="drawLoadsBtn" class="hidden" value="Tegn laster">

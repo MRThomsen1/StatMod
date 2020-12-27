@@ -85,6 +85,7 @@ function setSpanLength() {
   console.log(scale);
   drawModel();
   fullLoadCheckboxChangeHandler();
+  updateLineLoadStart();
   updateLineLoadLengthPlaceholder();
 }
 
@@ -334,44 +335,12 @@ function drawLineLoad(start, length, size, yPosition, color) {
     }
   }
 
-  /*
-  if (scale <= INITIALSCALE) {
-    arrowXCoordinatesLeft = [centerXCoordinate - (0.0625 / density) * scale];
-    arrowXCoordinatesRight = [centerXCoordinate + (0.0625 / density) * scale];
-  } else if (lineLength + 0.1 > MINIMUMLINELENGTH) {
-    if (
-      length >= lineLength ||
-      (length < MINIMUMLINELENGTH && length > MINIMUMLINELENGTH / 3)
-    ) {
-      arrowXCoordinatesLeft = [centerXCoordinate - length / (8 * density)];
-      arrowXCoordinatesRight = [centerXCoordinate + length / (8 * density)];
-    } else {
-      arrowXCoordinatesLeft = [centerXCoordinate];
-    }
-  }
-
-  for (let i = 0; i < (numberOfArrows - 2) / 2; i++) {
-    arrowXCoordinatesLeft.push(
-      arrowXCoordinatesLeft[i] - (0.125 / density) * scale
-    );
-    arrowXCoordinatesRight.push(
-      arrowXCoordinatesRight[i] + (0.125 / density) * scale
-    );
-  }
-*/
-
   for (let i = 0; i < arrowXCoordinatesLeft.length; i++) {
     drawArrowForLoad(arrowXCoordinatesLeft[i], yPosition, size, color);
   }
   for (let i = 0; i < arrowXCoordinatesRight.length; i++) {
     drawArrowForLoad(arrowXCoordinatesRight[i], yPosition, size, color);
   }
-  /*console.log(
-    lineCoorLeftX,
-    lineCoorRightX,
-    arrowXCoordinatesLeft,
-    arrowXCoordinatesRight
-  );*/
 }
 
 function clearLoads() {
@@ -433,23 +402,23 @@ function addLineLoad() {
   mainDiv.classList.add("lineLoadDiv");
 
   h5.textContent = `Linjelast #${currentIndex + 1}`;
-  
+
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
-  
+
   settingsIcon.src = "./resources/data/images/settingsicon.png";
   settingsIcon.classList.add("settingsIcon");
-  
+
   settingsIconContainer.classList.add("settingsIconContainer");
-  
+
   function toggleSettingsModal() {
     settingsModal.classList.toggle("pseudoHidden");
   }
-  
+
   settingsIcon.addEventListener("click", toggleSettingsModal);
-  
+
   settingsIconContainer.appendChild(settingsIcon);
- 
+
   // start and length inputs of load being added
   checkbox1.id = `checkbox1ForLineLoadIndex${currentIndex}`;
   checkbox1.type = "checkbox";
@@ -469,7 +438,13 @@ function addLineLoad() {
   numInput2.classList.add("numInput");
   numInput2.classList.add("loadInput");
   numInput2.classList.add("noSpinners");
-  numInput2.addEventListener("change", updateLineLoadStart);
+  numInput2.addEventListener("change", function () {
+    lineLoadObject.startX = lineCoorLeftX + numInput2.valueAsNumber * scale;
+    if (isNaN(numInput3.valueAsNumber)) {
+      lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
+    }
+    updateLoadDrawings();
+  });
 
   label2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
   label2.textContent = "Start: ";
@@ -480,7 +455,14 @@ function addLineLoad() {
   numInput3.classList.add("numInput");
   numInput3.classList.add("loadInput");
   numInput3.classList.add("noSpinners");
-  numInput3.addEventListener("change", updateLineLoadLength);
+  numInput3.addEventListener("change", function () {
+    if (isNaN(numInput3.valueAsNumber)) {
+      lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
+    } else {
+    lineLoadObject.length = numInput3.valueAsNumber * scale;
+    }
+    updateLoadDrawings();
+  });
 
   label3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
   label3.textContent = "Udbredelse: ";
@@ -569,7 +551,6 @@ function addLineLoad() {
   loadColorPicker.classList.add("colorPicker");
   loadColorPicker.value = "black";
   loadColorPicker.style.backgroundColor = loadColorPicker.value;
-  loadColorPicker.addEventListener("change", updateLoadColor);
 
   loadColorPickerWrapper.id = `loadColorPickerWrapperLineLoadIndex${currentIndex}`;
   loadColorPickerWrapper.classList.add("colorPickerWrapper");
@@ -577,6 +558,12 @@ function addLineLoad() {
 
   loadColorPickerLabel.htmlFor = loadColorPickerWrapper;
   loadColorPickerLabel.textContent = "Farve på last:";
+
+  loadColorPicker.addEventListener("change", function () {
+    lineLoadObject.color = loadColorPicker.value;
+    loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
+    updateLoadDrawings();
+  });
 
   loadColorPickerWrapper.appendChild(loadColorPicker);
   paragraph3.appendChild(loadColorPickerLabel);
@@ -654,7 +641,7 @@ function addLineLoad() {
   deleteLoadBtn.classList.add("deleteLoadButton");
   deleteLoadBtn.textContent = "Slet linjelast";
   deleteLoadBtn.addEventListener("click", function () {
-    currentIndex = parseInt(mainDiv.id.slice(13));    
+    currentIndex = parseInt(mainDiv.id.slice(13));
     lineLoads.splice(currentIndex, 1);
     reduceIndexInLineLoads(currentIndex);
     mainDiv.parentNode.removeChild(mainDiv);
@@ -663,13 +650,10 @@ function addLineLoad() {
         lineLoads[j].startY = lineCoorY - 15;
       } else {
         lineLoads[j].startY =
-          lineLoads[j - 1].startY -
-          lineLoads[j - 1].size -
-          10;
+          lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
       }
     }
-    if (lineLoads.length === 0) {return;}
-    // updateLoadDrawings();
+    updateLoadDrawings();
   });
 
   mainDiv.appendChild(h5);
@@ -748,10 +732,17 @@ function updateLineLoadStart() {
     if (document.getElementById(`checkbox1ForLineLoadIndex${i}`).checked) {
       continue;
     } else {
-      lineLoads[i].startX =
-        lineCoorLeftX +
-        document.getElementById(`numInput2ForLineLoadIndex${i}`).valueAsNumber *
-          scale;
+      let newStartX = document.getElementById(`numInput2ForLineLoadIndex${i}`)
+        .valueAsNumber;
+        newStartX = isNaN(newStartX) ? 0 : newStartX;
+      lineLoads[i].startX = lineCoorLeftX + newStartX * scale;
+      if (
+        isNaN(
+          document.getElementById(`numInput3ForLineLoadIndex${i}`).valueAsNumber
+        )
+      ) {
+        lineLoads[i].length = lineLength - newStartX * scale;
+      }
     }
   }
   updateLoadDrawings();
@@ -769,20 +760,6 @@ function updateLineLoadLength() {
   }
   updateLoadDrawings();
   updateLineLoadLengthPlaceholder();
-}
-
-function updateLoadColor() {
-  for (let i = 0; i < lineLoads.length; i++) {
-    lineLoads[i].color = document.getElementById(
-      `loadColorLineLoadIndex${i}`
-    ).value;
-    document.getElementById(
-      `loadColorPickerWrapperLineLoadIndex${i}`
-    ).style.backgroundColor = document.getElementById(
-      `loadColorLineLoadIndex${i}`
-    ).value;
-  }
-  updateLoadDrawings();
 }
 
 function addLineLoadLabel() {
