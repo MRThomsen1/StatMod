@@ -399,7 +399,7 @@ function isOdd(x) {
 }
 
 function addLineLoad() {
-  const currentIndex = lineLoads.length;
+  let currentIndex = lineLoads.length;
   const lineLoadObject = {
     startX: lineCoorLeftX,
     length: lineLength,
@@ -654,10 +654,22 @@ function addLineLoad() {
   deleteLoadBtn.classList.add("deleteLoadButton");
   deleteLoadBtn.textContent = "Slet linjelast";
   deleteLoadBtn.addEventListener("click", function () {
-    reduceIndexInLineLoads(currentIndex);
+    currentIndex = parseInt(mainDiv.id.slice(13));    
     lineLoads.splice(currentIndex, 1);
+    reduceIndexInLineLoads(currentIndex);
     mainDiv.parentNode.removeChild(mainDiv);
-    updateLoadDrawings();
+    for (let j = 0; j < lineLoads.length; j++) {
+      if (j === 0) {
+        lineLoads[j].startY = lineCoorY - 15;
+      } else {
+        lineLoads[j].startY =
+          lineLoads[j - 1].startY -
+          lineLoads[j - 1].size -
+          10;
+      }
+    }
+    if (lineLoads.length === 0) {return;}
+    // updateLoadDrawings();
   });
 
   mainDiv.appendChild(h5);
