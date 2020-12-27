@@ -278,9 +278,7 @@ function drawArrowForLoad(X, Y, length, color) {
   ctx.fill();
 }
 
-function drawLineLoad(start, length, size, yPosition, color) {
-  // const unscaledLength = length;
-  // length = length * scale;
+function drawLineLoad(start, length, size, yPosition, color, density) {
   const lineLoadCoordinates = [
     start,
     yPosition,
@@ -308,7 +306,6 @@ function drawLineLoad(start, length, size, yPosition, color) {
   loadRectanglesH.push(size + 2);
 
   const INITIALDISTANCE = 25;
-  const density = 1;
   const distance = INITIALDISTANCE * density;
   const numberOfArrows = Math.round(length / distance);
   const centerXCoordinate = start + length / 2;
@@ -376,6 +373,8 @@ function addLineLoad() {
     startY: null,
     color: "black",
     labelPlace: "top_right",
+    density: 1,
+    verticalScale: 10
   };
   if (currentIndex === 0) {
     lineLoadObject.startY = lineCoorY - 15;
@@ -459,7 +458,7 @@ function addLineLoad() {
     if (isNaN(numInput3.valueAsNumber)) {
       lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
     } else {
-    lineLoadObject.length = numInput3.valueAsNumber * scale;
+      lineLoadObject.length = numInput3.valueAsNumber * scale;
     }
     updateLoadDrawings();
   });
@@ -525,17 +524,11 @@ function addLineLoad() {
 
   // numOfDecimalsOnLoad.addEventListener("change", changeDecimals(loadSizeInput, numOfDecimalsOnLoad.valueAsNumber));
 
-  paragraph2.classList.add("smallFont");
-
   paragraph2.appendChild(label4);
   paragraph2.appendChild(loadSizeInput);
   paragraph2.insertAdjacentHTML("beforeend", " kN/m   ");
   paragraph2.insertAdjacentHTML("beforeend", "Skala");
   paragraph2.appendChild(loadScaleInput);
-
-  // paragraph2.appendChild(changeLoadScaleBtn);
-  // paragraph2.appendChild(numOfDecimalsOnLoad);
-  // paragraph2.insertAdjacentHTML("beforeend", " (antal decimaler)")
 
   form.appendChild(paragraph2);
 
@@ -588,20 +581,20 @@ function addLineLoad() {
   labelPlacementSettings.classList.add("labelPlacementSettings");
   staticModelSprite.src = "./resources/data/images/Statisk model2.png";
   radio1.type = "radio";
-  radio1.name = "position";
+  radio1.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio1.classList.add("radio1");
   radio1.addEventListener("change", changeLabelPosition);
   radio2.type = "radio";
-  radio2.name = "position";
+  radio2.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio2.classList.add("radio2");
   radio2.addEventListener("change", changeLabelPosition);
   radio3.type = "radio";
-  radio3.name = "position";
+  radio3.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio3.classList.add("radio3");
   radio3.checked = true;
   radio3.addEventListener("change", changeLabelPosition);
   radio4.type = "radio";
-  radio4.name = "position";
+  radio4.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio4.classList.add("radio4");
   radio4.addEventListener("change", changeLabelPosition);
   exitIconContainer.classList.add("exitIconContainer");
@@ -653,7 +646,7 @@ function addLineLoad() {
           lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
       }
     }
-    updateLoadDrawings();
+    updateLoadSizes();
   });
 
   mainDiv.appendChild(h5);
@@ -682,7 +675,8 @@ function updateLoadDrawings() {
       lineLoads[i].length,
       lineLoads[i].size,
       lineLoads[i].startY,
-      lineLoads[i].color
+      lineLoads[i].color,
+      lineLoads[i].density
     );
   }
   addLineLoadLabel();
@@ -734,7 +728,7 @@ function updateLineLoadStart() {
     } else {
       let newStartX = document.getElementById(`numInput2ForLineLoadIndex${i}`)
         .valueAsNumber;
-        newStartX = isNaN(newStartX) ? 0 : newStartX;
+      newStartX = isNaN(newStartX) ? 0 : newStartX;
       lineLoads[i].startX = lineCoorLeftX + newStartX * scale;
       if (
         isNaN(
@@ -804,11 +798,12 @@ function addLineLoadLabel() {
 function adjustHorizontalScale() {
   scale = horizontalScaleInput.valueAsNumber * INITIALSCALE;
   setSpanLength();
+  updateLineLoadLength();
   updateLoadDrawings();
 }
 
 function reduceIndexInLineLoads(deletedIndex) {
-  const lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex'");
+  const lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
   const startingIndex = deletedIndex + 1;
   for (let element of lineLoadIds) {
     let id = element.id;
@@ -916,3 +911,45 @@ document
     document.getElementById("spanScaleSettings").classList.toggle("hidden");
     setSpanLength();
   });
+
+document
+  .getElementById("lineLoadsSettingsIcon")
+  .addEventListener("click", function () {
+    document
+      .getElementById("lineLoadsSettingsModal")
+      .classList.toggle("pseudoHidden");
+  });
+
+  document
+  .getElementById("lineLoadsSettingsExitIcon")
+  .addEventListener("click", function () {
+    document
+      .getElementById("lineLoadsSettingsModal")
+      .classList.toggle("pseudoHidden");
+  });
+
+document
+  .getElementById("pointLoadsSettingsIcon")
+  .addEventListener("click", function () {
+    document
+      .getElementById("pointLoadsSettingsModal")
+      .classList.toggle("pseudoHidden");
+  });
+
+document
+  .getElementById("pointLoadsSettingsExitIcon")
+  .addEventListener("click", function () {
+    document
+      .getElementById("pointLoadsSettingsModal")
+      .classList.toggle("pseudoHidden");
+  });
+
+document.getElementById("allLineLoadsScaleInput").addEventListener("change", function () {
+const lineloadScaleInputs = document.querySelectorAll("[id*='loadScaleInputLineLoadIndex']");
+const allLineLoadsScale = document.getElementById("allLineLoadsScaleInput").valueAsNumber;
+for (const scaleInput of lineloadScaleInputs) {
+  scaleInput.value = allLineLoadsScale;
+}
+updateLoadSizes();
+});
+

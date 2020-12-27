@@ -35,7 +35,7 @@
             <label for="manualScaleCheckbox">Indstil horisontal skala manuelt</label>
             <input type="checkbox" id="manualScaleCheckbox">
             <div id="spanScaleSettings" class="hidden">
-              <input type="number" id="horizontalScale" class="noSpinners scaleInput">
+              <input type="number" id="horizontalScale" class="numInput noSpinners scaleInput">
               <div class="slideContainer">
                 <input id="horizontalScaleSlider" type="range" min="1" max="1000" value="200" class="slider">
               </div>
@@ -53,8 +53,9 @@
       <h4>Linjelaster</h4>
       <div class="settingsIconContainer mainSettingsIconContainer">
         <img id="lineLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
-        <div id="lineLoadsSettingsModal" class="settingsModal pseudoHidden" >
-          <input type="number" id="allLineLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1">
+        <div id="lineLoadsSettingsModal" class="mainSettingsModal settingsModal pseudoHidden" >
+          <label for="allLineLoadsScaleInput">Indstil vertikal skala for alle linjelaster</label>
+          <input type="number" id="allLineLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1" value="10">
           <div class="exitIconContainer">
             <img id="lineLoadsSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
           </div>
@@ -66,8 +67,9 @@
       <h4>Punktlaster</h2>
         <div class="settingsIconContainer mainSettingsIconContainer">
           <img id="pointLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
-          <div id="pointLoadsSettingsModal" class="settingsModal pseudoHidden" >
-            <input type="number" id="allPointLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1">
+          <div id="pointLoadsSettingsModal" class="mainSettingsModal settingsModal pseudoHidden" >
+            <label for="allPointLoadsScaleInput">Indstil vertikal skala for alle punktlaster</label>
+            <input type="number" id="allPointLoadsScaleInput" class="numInput scaleSpinner spinnerOpacity1" value="10">
             <div class="exitIconContainer">
               <img id="pointLoadsSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
             </div>

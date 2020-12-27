@@ -41,18 +41,100 @@ p {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   background-color: rgba(190, 190, 190, 0.356);
   /* background-color: rgba(190, 190, 190, 0.596); */
-border: none;
-border-radius: 5px;
-padding: 2px 5px;
-cursor: pointer;
-outline: none;
-transition: 0.2s all;
+  border: none;
+  border-radius: 5px;
+  padding: 2px 5px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s all;
 }
 
 .btn1:active {
   transform: scale(0.96);
   box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.24);
   /* background-color: rgb(145, 145, 145); */
+}
+
+.numInput {
+  font-family: sans-serif;
+  background:#b4b4b457;
+  border: none;
+  border-radius: 2px;
+  text-align: right;
+}
+
+.numInput:focus {
+  background: #c5c5c570;
+  outline: none;
+}
+
+.numInput::placeholder {
+  color: rgb(0, 0, 0);
+}
+
+.numInput:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.spanInput {
+  width: 40px;
+}
+
+.loadInput {
+  width: 30px;
+}
+
+.noSpinners{
+  -moz-appearance: textfield; /* Fjern op/ned pile i feltet (Firefox)*/
+}
+/* Fjern op/ned pile i feltet (Chrome, Safari, Edge, Opera) */
+.noSpinners::-webkit-outer-spin-button, .noSpinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.decimalSpinner {
+  width: 25px;
+  text-align: left;
+}
+
+.spinnerOpacity1::-webkit-inner-spin-button, 
+.spinnerOpacity1::-webkit-outer-spin-button {  
+    opacity: 1;
+}
+
+.scaleSpinner {
+  width: 35px;
+  text-align: left;
+  margin-left: 5px;
+}
+
+.colorPicker {
+  height: 15px;
+  width: 15px;
+  opacity: 0;
+  display: block;
+  border: none;
+  cursor: pointer;
+}
+
+.colorPickerWrapper{
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  margin-bottom: 5px;
+  border: 1px, solid; 
+  border-radius: 5px;
+}
+
+.clearBackground {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.205);
+  z-index: 8;
 }
 
 #spanLengthInputDiv {
@@ -85,12 +167,6 @@ transition: 0.2s all;
   box-shadow: 3px 2px 10px 1px rgba(0, 0, 0, 0.24);
 }
 
-#spanLengthInputDiv .settingsIconContainer {
-  top: 1px;
-  right: 10px;
-}
-
-
 .settingsModal {
   background-color: #729aaac7;
   /* background-color: #87b7ce; */
@@ -105,6 +181,25 @@ transition: 0.2s all;
   transition-duration: 0.3s, 0s;
   transition-delay: 0s;  
 }
+
+.mainSettingsModal {
+  width: 19rem;
+}
+
+.mainSettingsModal label {
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+.mainSettingsModal .numInput {
+  background-color: #d3d3d3;
+}
+
+#spanLengthInputDiv .settingsIconContainer {
+  top: 1px;
+  right: 10px;
+}
+
 
 #spanSettingsModal {
   width: 18rem;
@@ -225,7 +320,7 @@ margin-left: 5px;
 
 .settingsModal .exitIconContainer {
   position: absolute;
-  top: 2px;
+  top: 0px;
   right: 6px;
   height: 10px;
   width: 10px;
@@ -283,91 +378,10 @@ margin-left: 5px;
   right: 0px;
 }
 
-.numInput {
-  font-family: sans-serif;
-  background:#b4b4b457;
-  border: none;
-  border-radius: 2px;
-}
-
-.numInput:focus {
-  background: #c5c5c570;
-  outline: none;
-}
-
-.numInput::placeholder {
-  color: rgb(0, 0, 0);
-}
-
-.numInput:focus::-webkit-input-placeholder {
-  opacity: 0;
-}
-
-.spanInput {
-  width: 40px;
-}
-
-.loadInput {
-  width: 30px;
-}
-
 
 label[for*="heckbox"] {
   padding-left: 5px;
   font-size: 12px;
-}
-
-.noSpinners{
-  -moz-appearance: textfield; /* Fjern op/ned pile i feltet (Firefox)*/
-}
-/* Fjern op/ned pile i feltet (Chrome, Safari, Edge, Opera) */
-.noSpinners::-webkit-outer-spin-button, .noSpinners::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.decimalSpinner {
-  width: 25px;
-  text-align: left;
-}
-
-.spinnerOpacity1::-webkit-inner-spin-button, 
-.spinnerOpacity1::-webkit-outer-spin-button {  
-    opacity: 1;
-}
-
-.scaleSpinner {
-  width: 35px;
-  text-align: left;
-  margin-left: 5px;
-}
-
-.colorPicker {
-  height: 15px;
-  width: 15px;
-  opacity: 0;
-	display: block;
-  border: none;
-  cursor: pointer;
-}
-
-.colorPickerWrapper{
-  display: inline-block;
-  height: 15px;
-  width: 15px;
-  margin-bottom: 5px;
-  border: 1px, solid; 
-  border-radius: 5px;
-}
-
-.clearBackground {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.205);
-  z-index: 8;
 }
 
 
