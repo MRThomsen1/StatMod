@@ -364,6 +364,10 @@ function isOdd(x) {
   }
 }
 
+function makeArray (arrayLikeObject) {
+  return Array.prototype.slice.call(arrayLikeObject);
+}
+
 function addLineLoad() {
   let currentIndex = lineLoads.length;
   const lineLoadObject = {
@@ -388,13 +392,13 @@ function addLineLoad() {
   const h5 = document.createElement("h5");
   const form = document.createElement("form");
 
-  const label1 = document.createElement("label");
+  const labelForCheckbox1 = document.createElement("label");
   const checkbox1 = document.createElement("input");
   const subDiv1 = document.createElement("div");
   const paragraph1 = document.createElement("p");
-  const label2 = document.createElement("label");
+  const labelForNumInput2 = document.createElement("label");
   const numInput2 = document.createElement("input");
-  const label3 = document.createElement("label");
+  const labelForNumInput3 = document.createElement("label");
   const numInput3 = document.createElement("input");
 
   mainDiv.id = `lineLoadIndex${currentIndex}`;
@@ -425,8 +429,8 @@ function addLineLoad() {
   checkbox1.checked = true;
   checkbox1.addEventListener("change", fullLoadCheckboxChangeHandler);
 
-  label1.htmlFor = `checkbox1ForLineLoadIndex${currentIndex}`;
-  label1.textContent = "Last over hele modellens længde?";
+  labelForCheckbox1.htmlFor = `checkbox1ForLineLoadIndex${currentIndex}`;
+  labelForCheckbox1.textContent = "Last over hele modellens længde?";
 
   subDiv1.id = `subDiv1LineLoadIndex${currentIndex}`;
   subDiv1.classList.add("hidden");
@@ -445,8 +449,8 @@ function addLineLoad() {
     updateLoadDrawings();
   });
 
-  label2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
-  label2.textContent = "Start: ";
+  labelForNumInput2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
+  labelForNumInput2.textContent = "Start: ";
 
   numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
@@ -463,28 +467,28 @@ function addLineLoad() {
     updateLoadDrawings();
   });
 
-  label3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
-  label3.textContent = "Udbredelse: ";
+  labelForNumInput3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
+  labelForNumInput3.textContent = "Udbredelse: ";
 
   paragraph1.classList.add("smallFont");
   paragraph1.classList.add("whiteSpacePre");
 
-  paragraph1.appendChild(label2);
+  paragraph1.appendChild(labelForNumInput2);
   paragraph1.appendChild(numInput2);
   paragraph1.insertAdjacentHTML("beforeend", "m  ");
-  paragraph1.appendChild(label3);
+  paragraph1.appendChild(labelForNumInput3);
   paragraph1.appendChild(numInput3);
   paragraph1.insertAdjacentHTML("beforeend", "m");
   subDiv1.appendChild(paragraph1);
 
-  form.appendChild(label1);
+  form.appendChild(labelForCheckbox1);
   form.appendChild(checkbox1);
   form.appendChild(subDiv1);
   // start and length inputs of load added
 
   // adding input for size of load
   const paragraph2 = document.createElement("p");
-  const label4 = document.createElement("label");
+  const labelForLoadSizeInput = document.createElement("label");
   const loadSizeInput = document.createElement("input");
   // const numOfDecimalsOnLoad = document.createElement("input");
 
@@ -497,8 +501,8 @@ function addLineLoad() {
   loadSizeInput.classList.add("loadInput");
   loadSizeInput.classList.add("noSpinners");
 
-  label4.htmlFor = loadSizeInput;
-  label4.textContent = "Størrelse: ";
+  labelForLoadSizeInput.htmlFor = loadSizeInput;
+  labelForLoadSizeInput.textContent = "Størrelse: ";
 
   loadSizeInput.addEventListener("change", updateLoadSizes);
 
@@ -524,7 +528,7 @@ function addLineLoad() {
 
   // numOfDecimalsOnLoad.addEventListener("change", changeDecimals(loadSizeInput, numOfDecimalsOnLoad.valueAsNumber));
 
-  paragraph2.appendChild(label4);
+  paragraph2.appendChild(labelForLoadSizeInput);
   paragraph2.appendChild(loadSizeInput);
   paragraph2.insertAdjacentHTML("beforeend", " kN/m   ");
   paragraph2.insertAdjacentHTML("beforeend", "Skala");
@@ -629,23 +633,38 @@ function addLineLoad() {
   exitIconContainer.appendChild(exitIcon);
   settingsModal.appendChild(exitIconContainer);
 
+  const sameLineSettings = document.createElement("div");
+  const checkbox2 = document.createElement("input");
+  const labelForCheckbox2 = document.createElement("label");
+
+  sameLineSettings.classList.add("sameLineSettings")
+  checkbox2.type = "checkbox";
+  checkbox2.id = `checkbox2ForLineLoadIndex${currentIndex}`;
+  labelForCheckbox2.htmlFor = `checkbox2ForLineLoadIndex${currentIndex}`;
+  labelForCheckbox2.textContent = "Tegn linjelast på samme linje som forrige?";
+  if (currentIndex === 0) {sameLineSettings.classList.add("hidden");}
+
+  sameLineSettings.appendChild(labelForCheckbox2);
+  sameLineSettings.appendChild(checkbox2);
+  settingsModal.appendChild(sameLineSettings);
+
+  checkbox2.addEventListener("change", function () {
+    // currentIndex = parseInt(mainDiv.id.slice(13));
+    // const positionOnSameLine = 2
+    updateLineLoadStartY();
+  });
+
   const deleteLoadBtn = document.createElement("button");
   deleteLoadBtn.classList.add("btn1");
   deleteLoadBtn.classList.add("deleteLoadButton");
   deleteLoadBtn.textContent = "Slet linjelast";
   deleteLoadBtn.addEventListener("click", function () {
     currentIndex = parseInt(mainDiv.id.slice(13));
+    if (currentIndex === 0) {sameLineSettings.classList.add("hidden");}
     lineLoads.splice(currentIndex, 1);
     reduceIndexInLineLoads(currentIndex);
     mainDiv.parentNode.removeChild(mainDiv);
-    for (let j = 0; j < lineLoads.length; j++) {
-      if (j === 0) {
-        lineLoads[j].startY = lineCoorY - 15;
-      } else {
-        lineLoads[j].startY =
-          lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
-      }
-    }
+    updateLineLoadStartY();
     updateLoadSizes();
   });
 
@@ -682,17 +701,28 @@ function updateLoadDrawings() {
   addLineLoadLabel();
 }
 
+function updateLineLoadStartY () {
+  for (let j = 0; j < lineLoads.length; j++) {
+    if (j === 0) {
+      lineLoads[j].startY = lineCoorY - 15;
+    } else if (document.getElementById(`checkbox2ForLineLoadIndex${j}`).checked) {
+      lineLoads[j].startY = lineLoads[j - 1].startY;
+    } else {
+      lineLoads[j].startY =
+        lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
+    }
+}
+updateLoadDrawings();
+}
+
 function updateLoadSizes() {
   for (let i = 0; i < lineLoads.length; i++) {
     lineLoads[i].size =
       document.getElementById(`loadSizeInputLineLoadIndex${i}`).valueAsNumber *
       document.getElementById(`loadScaleInputLineLoadIndex${i}`).valueAsNumber *
       1.5;
-    if (i !== 0 && lineLoads[i - 1].size !== 0) {
-      lineLoads[i].startY =
-        lineLoads[i - 1].startY - lineLoads[i - 1].size - 10;
-    }
   }
+  updateLineLoadStartY();
   updateLoadDrawings();
 }
 
@@ -804,30 +834,51 @@ function adjustHorizontalScale() {
 
 function reduceIndexInLineLoads(deletedIndex) {
   const lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
+  const lineLoadLabels = document.querySelectorAll(".lineLoadDiv label");
   const startingIndex = deletedIndex + 1;
   for (let element of lineLoadIds) {
     let id = element.id;
-    let idText;
     let idIndex;
     if (!isNaN(parseInt(id.slice(-3)))) {
-      idText = id.slice(0, -3);
       idIndex = id.slice(-3);
     } else if (!isNaN(parseInt(id.slice(-2)))) {
-      idText = id.slice(0, -2);
       idIndex = id.slice(-2);
     } else if (!isNaN(parseInt(id.slice(-1)))) {
-      idText = id.slice(0, -1);
       idIndex = id.slice(-1);
     }
     if (idIndex < startingIndex) {
       continue;
     }
-    newIdIndex = idIndex - 1;
+    indexLength = String(idIndex).length;
+    const idText = id.slice(0, -indexLength)
+    , newIdIndex = idIndex - 1;
     if (idText === "lineLoadIndex") {
       element.firstChild.innerHTML = `Linjelast #${idIndex}`;
     }
     element.id = idText + newIdIndex;
   }
+  for (const label of lineLoadLabels) {
+    let labelFor = label.htmlFor;
+    let labelForIndex;
+    if (!isNaN(parseInt(labelFor.slice(-3)))) {
+      labelForIndex = labelFor.slice(-3);
+    } else if (!isNaN(parseInt(labelFor.slice(-2)))) {
+      labelForIndex = labelFor.slice(-2);
+    } else if (!isNaN(parseInt(labelFor.slice(-1)))) {
+      labelForIndex = labelFor.slice(-1);
+    }
+    if (labelForIndex < startingIndex) {
+      continue;
+    }
+    indexLength = String(labelForIndex).length;
+    const labelForText = labelFor.slice(0, -indexLength)
+    , newLabelForIndex = labelForIndex - 1;
+    label.htmlFor = labelForText + newLabelForIndex;
+  }
+}
+
+function drawPointLoad (X, Y, length, color) {
+
 }
 
 // function changeDecimals(id, value)

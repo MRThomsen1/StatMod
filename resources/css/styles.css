@@ -100,11 +100,11 @@ p {
 
 .spinnerOpacity1::-webkit-inner-spin-button, 
 .spinnerOpacity1::-webkit-outer-spin-button {  
-    opacity: 1;
+  opacity: 1;
 }
 
 .scaleSpinner {
-  width: 35px;
+  width: 36px;
   text-align: left;
   margin-left: 5px;
 }
@@ -125,6 +125,15 @@ p {
   margin-bottom: 5px;
   border: 1px, solid; 
   border-radius: 5px;
+}
+
+label[for*="heckbox"] {
+  padding-left: 5px;
+  font-size: 12px;
+}
+
+.whiteSpacePre {
+  white-space: pre;
 }
 
 .clearBackground {
@@ -310,13 +319,27 @@ margin-left: 5px;
   left: 35px;
   top: -5px;
   width: 18rem;
-  height: 6rem;
+  height: auto;
 }
 
 .lineLoadDiv .settingsModal p {
   padding-top: 2px;
   padding-left: 15px;
 }
+
+.sameLineSettings {
+  padding-top: 0px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 8px;
+  border-top: 1px solid black;
+}
+
+.sameLineSettings label {
+  font-size: 11.5px;
+}
+
+/* .sameLineSettings input[type=checkbox] */
 
 .settingsModal .exitIconContainer {
   position: absolute;
@@ -326,6 +349,7 @@ margin-left: 5px;
   width: 10px;
   z-index: 13;
 }
+
 
 .settingsModal .exitIconContainer img {
   height: 10px;
@@ -339,9 +363,8 @@ margin-left: 5px;
   position: relative;
   margin: 0 auto;
   /* background-color: rgb(163, 163, 163); */
-  max-height: 4.5rem;
-  border-radius: 4px;
-  width: 16rem;
+  padding-top: 5px;
+  width: 16.5rem;
   z-index: 10;
 }
 
@@ -364,29 +387,20 @@ margin-left: 5px;
 }
 
 .labelPlacementSettings .radio1 {
-  top: 0px;
+  top: 5px;
+  left: 5px;
 }
 .labelPlacementSettings .radio2 {
-  bottom: 1.3rem;
+  bottom: 1.5rem;
+  left: 5px;
 }
 .labelPlacementSettings .radio3 {
-  top: 0px;
-  right: 0px;
+  top: 5px;
+  right: 5px;
 }
 .labelPlacementSettings .radio4 {
-  bottom: 1.3rem;
-  right: 0px;
-}
-
-
-label[for*="heckbox"] {
-  padding-left: 5px;
-  font-size: 12px;
-}
-
-
-.whiteSpacePre {
-  white-space: pre;
+  bottom: 1.5rem;
+  right: 5px;
 }
 
 .hidden {
