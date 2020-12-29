@@ -438,7 +438,7 @@ function addLineLoad() {
   numInput2.id = `numInput2ForLineLoadIndex${currentIndex}`;
   numInput2.type = "number";
   numInput2.placeholder = "0,0";
-  numInput2.step "any";
+  numInput2.step = "any";
   numInput2.classList.add("numInput");
   numInput2.classList.add("loadInput");
   numInput2.classList.add("noSpinners");
@@ -456,7 +456,7 @@ function addLineLoad() {
   numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
   numInput3.placeholder = `${spanLengthDecimal}`;
-  numInput3.step "any";
+  numInput3.step = "any";
   numInput3.classList.add("numInput");
   numInput3.classList.add("loadInput");
   numInput3.classList.add("noSpinners");
