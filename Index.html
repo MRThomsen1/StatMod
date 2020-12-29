@@ -25,6 +25,7 @@
         class="numInput spanInput noSpinners"
         id="spanLengthId";
         placeholder="1,0";
+        step="any"
         >
         m
         <button type="button" class="btn1" id="tegnBtn">Opdater</button>
@@ -35,7 +36,7 @@
             <label for="manualScaleCheckbox">Indstil horisontal skala manuelt</label>
             <input type="checkbox" id="manualScaleCheckbox">
             <div id="spanScaleSettings" class="hidden">
-              <input type="number" id="horizontalScale" class="numInput noSpinners scaleInput">
+              <input type="number" id="horizontalScale" class="numInput noSpinners scaleInput" step="any">
               <div class="slideContainer">
                 <input id="horizontalScaleSlider" type="range" min="1" max="1000" value="200" class="slider">
               </div>

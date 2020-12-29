@@ -384,14 +384,14 @@ function addLineLoad() {
     lineLoadObject.startY = lineCoorY - 15;
   } else {
     lineLoadObject.startY =
-      lineLoads[currentIndex - 1].startY -
-      lineLoads[currentIndex - 1].size -
-      10;
+    lineLoads[currentIndex - 1].startY -
+    lineLoads[currentIndex - 1].size -
+    10;
   }
   const mainDiv = document.createElement("div");
   const h5 = document.createElement("h5");
   const form = document.createElement("form");
-
+  
   const labelForCheckbox1 = document.createElement("label");
   const checkbox1 = document.createElement("input");
   const subDiv1 = document.createElement("div");
@@ -400,44 +400,45 @@ function addLineLoad() {
   const numInput2 = document.createElement("input");
   const labelForNumInput3 = document.createElement("label");
   const numInput3 = document.createElement("input");
-
+  
   mainDiv.id = `lineLoadIndex${currentIndex}`;
   mainDiv.classList.add("lineLoadDiv");
-
+  
   h5.textContent = `Linjelast #${currentIndex + 1}`;
-
+  
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
-
+  
   settingsIcon.src = "./resources/data/images/settingsicon.png";
   settingsIcon.classList.add("settingsIcon");
-
+  
   settingsIconContainer.classList.add("settingsIconContainer");
-
+  
   function toggleSettingsModal() {
     settingsModal.classList.toggle("pseudoHidden");
   }
-
+  
   settingsIcon.addEventListener("click", toggleSettingsModal);
-
+  
   settingsIconContainer.appendChild(settingsIcon);
-
+  
   // start and length inputs of load being added
   checkbox1.id = `checkbox1ForLineLoadIndex${currentIndex}`;
   checkbox1.type = "checkbox";
   // checkbox1.classList.add("fullLoadCheckbox");
   checkbox1.checked = true;
   checkbox1.addEventListener("change", fullLoadCheckboxChangeHandler);
-
+  
   labelForCheckbox1.htmlFor = `checkbox1ForLineLoadIndex${currentIndex}`;
   labelForCheckbox1.textContent = "Last over hele modellens længde?";
-
+  
   subDiv1.id = `subDiv1LineLoadIndex${currentIndex}`;
   subDiv1.classList.add("hidden");
-
+  
   numInput2.id = `numInput2ForLineLoadIndex${currentIndex}`;
   numInput2.type = "number";
   numInput2.placeholder = "0,0";
+  numInput2.step "any";
   numInput2.classList.add("numInput");
   numInput2.classList.add("loadInput");
   numInput2.classList.add("noSpinners");
@@ -448,13 +449,14 @@ function addLineLoad() {
     }
     updateLoadDrawings();
   });
-
+  
   labelForNumInput2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
   labelForNumInput2.textContent = "Start: ";
-
+  
   numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
   numInput3.placeholder = `${spanLengthDecimal}`;
+  numInput3.step "any";
   numInput3.classList.add("numInput");
   numInput3.classList.add("loadInput");
   numInput3.classList.add("noSpinners");
@@ -496,6 +498,7 @@ function addLineLoad() {
 
   loadSizeInput.id = `loadSizeInputLineLoadIndex${currentIndex}`;
   loadSizeInput.type = "number";
+  loadSizeInput.step = "any";
   // loadSizeInput.placeholder = `${spanLengthDecimal}`;
   loadSizeInput.classList.add("numInput");
   loadSizeInput.classList.add("loadInput");
