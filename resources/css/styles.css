@@ -22,6 +22,10 @@ body {
   margin-left: 20px;
 }
 
+.sidebar {
+  max-width: 270px;
+}
+
 h3 {
   margin: 0px;
   font-size: 18px;
@@ -82,6 +86,7 @@ p {
 
 .loadInput {
   width: 30px;
+  margin-right: 4px;
 }
 
 .noSpinners{
@@ -105,8 +110,7 @@ p {
 
 .scaleSpinner {
   width: 36px;
-  text-align: left;
-  margin-left: 5px;
+  text-align: right;
 }
 
 .colorPicker {
@@ -130,10 +134,6 @@ p {
 label[for*="heckbox"] {
   padding-left: 5px;
   font-size: 12px;
-}
-
-.whiteSpacePre {
-  white-space: pre;
 }
 
 .clearBackground {
@@ -177,7 +177,7 @@ label[for*="heckbox"] {
 }
 
 .settingsModal {
-  background-color: #729aaac7;
+  background-color: #7da5b4fd;
   /* background-color: #87b7ce; */
   color:#000000;
   position: absolute;
@@ -200,10 +200,6 @@ label[for*="heckbox"] {
   font-size: 12px;
 }
 
-.mainSettingsModal .numInput {
-  background-color: #d3d3d3;
-}
-
 #spanLengthInputDiv .settingsIconContainer {
   top: 1px;
   right: 10px;
@@ -223,6 +219,10 @@ label[for*="heckbox"] {
   font-size: 12px;
   padding-left: 5px;
   margin-left: 0px;
+}
+
+.settingsModal .numInput {
+  background-color: #d8d8d8af;
 }
 
 .settingsModal .scaleInput {
@@ -270,12 +270,7 @@ margin-top: 5px;
 margin-left: 5px;
 }
 
-#lineLoadDiv {
-  display: block;
-  max-width: 270px;
-}
-
-.lineLoadDiv {
+.loadDiv {
   display: block;
   position: relative;
   background: #03030327;
@@ -285,11 +280,12 @@ margin-left: 5px;
   padding-left: 0px;
   padding-right: 5px;
   margin: 5px auto 2.5px;
+  font-size: 14px;
 }
 
-.lineLoadDiv h5 {
+.loadDiv h5 {
   padding-top: 5px;
-  margin: 0px 0px 10px 5px;
+  margin: 0px 0px 5px 5px;
 }
 
 .deleteLoadButton {
@@ -299,18 +295,17 @@ margin-left: 5px;
   right: 13%;
 }
 
-.lineLoadDiv label {
+.loadDiv label {
   font-size: 14px;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.lineLoadDiv p {
-  font-size: 14px;
-  margin-left: 0px;
+.div1 {
+  display: flex;
 }
 
-.lineLoadDiv .settingsIconContainer {
+.loadDiv .settingsIconContainer {
   top: 5px;
   right: 10px;
 }
@@ -322,15 +317,21 @@ margin-left: 5px;
   height: auto;
 }
 
-.lineLoadDiv .settingsModal p {
-  padding-top: 2px;
-  padding-left: 15px;
+.pointLoadDiv .settingsModal {
+  width: 9rem;
 }
 
+.loadDiv .settingsModal p {
+  padding-top: 2px;
+  padding-bottom: 0px;
+}
+
+.loadDiv .settingsModal label {
+font-size: 12px;
+}
 .sameLineSettings {
   padding-top: 0px;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-right: 2px;
   margin-bottom: 8px;
   border-top: 1px solid black;
 }
@@ -343,13 +344,19 @@ margin-left: 5px;
 
 .settingsModal .exitIconContainer {
   position: absolute;
-  top: 0px;
+  top: 4px;
   right: 6px;
   height: 10px;
   width: 10px;
   z-index: 13;
 }
 
+.mainSettingsModal .exitIconContainer {
+top: 0px;
+}
+#spanSettingsModal .exitIconContainer {
+top: 0px;
+}
 
 .settingsModal .exitIconContainer img {
   height: 10px;
@@ -359,48 +366,84 @@ margin-left: 5px;
 }
 
 .labelPlacementSettings {
-  display: block;
-  position: relative;
-  margin: 0 auto;
+  display: grid;
   /* background-color: rgb(163, 163, 163); */
-  padding-top: 5px;
-  width: 16.5rem;
+  margin-left: 10px;
   z-index: 10;
+  grid-template-columns: 1rem 232px 1rem;
+  grid-template-rows: 0.5rem 1rem 0.5rem 1rem 2rem;
+  justify-items: center;
+  align-items: center;
 }
 
 .labelPlacementSettings img {
-  display: block;
-  position: relative;
-  max-width: 16rem;
+  max-width: 15.9rem;
   height: 3.8rem;
-  margin: 0.25rem auto;
-  padding: 0 1rem
-  /* margin-left: 1.5rem; */
-  /* margin-top: auto; */
+  grid-column: 2 / 2;
+  grid-row: 1 / 6;
+  /* margin: 0 auto; */
 }
 
 .labelPlacementSettings input[type=radio] {
-  display: inline-block;
-  position: absolute;
-  margin: 0.1rem 0.3rem;
   z-index: 11;
+  margin: 0px;
 }
 
 .labelPlacementSettings .radio1 {
-  top: 5px;
-  left: 5px;
+  grid-row: 2;
+  grid-column: 1;
+  justify-items: right;
 }
+
 .labelPlacementSettings .radio2 {
-  bottom: 1.5rem;
-  left: 5px;
+  grid-row: 4;
+  grid-column: 1;
 }
 .labelPlacementSettings .radio3 {
-  top: 5px;
-  right: 5px;
+  grid-row: 2;
+  grid-column: 3;
 }
 .labelPlacementSettings .radio4 {
-  bottom: 1.5rem;
-  right: 5px;
+  grid-row: 4;
+  grid-column: 3;
+}
+
+.pointLoadLabelPlacementSettings {
+display: grid;
+margin: 10px;
+z-index: 10;
+grid-template-columns: 1rem 1rem 1rem;
+grid-template-rows: 1rem 3rem 1rem;
+justify-items: center;
+align-items: center;
+}
+
+.pointLoadLabelPlacementSettings img {
+height: 5rem;  
+grid-column-start: 2;
+grid-row-start: 2;
+}
+
+.pointLoadLabelPlacementSettings input[type=radio] {
+  margin: 0px;
+  z-index: 11;
+}
+
+.pointLoadLabelPlacementSettings .radio1 {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+.pointLoadLabelPlacementSettings .radio2 {
+  grid-column-start: 1;
+  grid-row-start: 3;
+}
+.pointLoadLabelPlacementSettings .radio3 {
+  grid-column-start: 3;
+  grid-row-start: 1;
+}
+.pointLoadLabelPlacementSettings .radio4 {
+  grid-column-start: 3;
+grid-row-start: 3;
 }
 
 .hidden {

@@ -26,8 +26,7 @@ let loadRectanglesW = [];
 let loadRectanglesH = [];
 
 let lineLoads = [];
-
-let fullLoadCheckboxClass;
+let pointLoads = [];
 
 const spanLengthInput = document.getElementById("spanLengthId");
 
@@ -364,7 +363,7 @@ function isOdd(x) {
   }
 }
 
-function makeArray (arrayLikeObject) {
+function makeArray(arrayLikeObject) {
   return Array.prototype.slice.call(arrayLikeObject);
 }
 
@@ -376,65 +375,110 @@ function addLineLoad() {
     size: null,
     startY: null,
     color: "black",
-    labelPlace: "top_right",
+    labelPos: "top_right",
     density: 1,
-    verticalScale: 10
+    verticalScale: 10,
   };
   if (currentIndex === 0) {
     lineLoadObject.startY = lineCoorY - 15;
   } else {
     lineLoadObject.startY =
-    lineLoads[currentIndex - 1].startY -
-    lineLoads[currentIndex - 1].size -
-    10;
+      lineLoads[currentIndex - 1].startY -
+      lineLoads[currentIndex - 1].size -
+      10;
   }
   const mainDiv = document.createElement("div");
   const h5 = document.createElement("h5");
   const form = document.createElement("form");
-  
-  const labelForCheckbox1 = document.createElement("label");
-  const checkbox1 = document.createElement("input");
-  const subDiv1 = document.createElement("div");
-  const paragraph1 = document.createElement("p");
-  const labelForNumInput2 = document.createElement("label");
-  const numInput2 = document.createElement("input");
-  const labelForNumInput3 = document.createElement("label");
-  const numInput3 = document.createElement("input");
-  
+
   mainDiv.id = `lineLoadIndex${currentIndex}`;
+  mainDiv.classList.add("loadDiv");
   mainDiv.classList.add("lineLoadDiv");
-  
+
   h5.textContent = `Linjelast #${currentIndex + 1}`;
-  
+
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
-  
+
   settingsIcon.src = "./resources/data/images/settingsicon.png";
   settingsIcon.classList.add("settingsIcon");
-  
+
   settingsIconContainer.classList.add("settingsIconContainer");
-  
+
   function toggleSettingsModal() {
     settingsModal.classList.toggle("pseudoHidden");
   }
-  
+
   settingsIcon.addEventListener("click", toggleSettingsModal);
-  
+
   settingsIconContainer.appendChild(settingsIcon);
-  
+
+  // adding input for size of load
+
+  const div1 = document.createElement("div");
+  const labelForLoadSizeInput = document.createElement("label");
+  const loadSizeInput = document.createElement("input");
+
+  div1.classList.add("div1");
+  // const numOfDecimalsOnLoad = document.createElement("input");
+
+  loadSizeInput.id = `loadSizeInputLineLoadIndex${currentIndex}`;
+  loadSizeInput.type = "number";
+  loadSizeInput.step = "any";
+  // loadSizeInput.placeholder = `${spanLengthDecimal}`;
+  loadSizeInput.classList.add("numInput");
+  loadSizeInput.classList.add("loadInput");
+  loadSizeInput.classList.add("noSpinners");
+
+  labelForLoadSizeInput.htmlFor = `loadSizeInputLineLoadIndex${currentIndex}`;
+  labelForLoadSizeInput.textContent = "Størrelse: ";
+
+  loadSizeInput.addEventListener("change", updateLoadSizes);
+
+  // numOfDecimalsOnLoad.id = `numOfDecimalsOnLoadIndex${currentIndex}`;
+  // numOfDecimalsOnLoad.type = "number";
+  // numOfDecimalsOnLoad.classList.add("decimalSpinner");
+  // numOfDecimalsOnLoad.value = 1;
+
+  // numOfDecimalsOnLoad.addEventListener("change", changeDecimals(loadSizeInput, numOfDecimalsOnLoad.valueAsNumber));
+
+  div1.appendChild(labelForLoadSizeInput);
+  div1.appendChild(loadSizeInput);
+  div1.insertAdjacentHTML("beforeend", "kN/m");
+
+  form.appendChild(div1);
+
+  // input for size of load added
+
   // start and length inputs of load being added
+  const labelForCheckbox1 = document.createElement("label");
+  const checkbox1 = document.createElement("input");
+
+  const div2 = document.createElement("div");
+
+  const subDiv1 = document.createElement("div");
+  const labelForNumInput2 = document.createElement("label");
+  const numInput2 = document.createElement("input");
+
+  const subDiv2 = document.createElement("div");
+  const labelForNumInput3 = document.createElement("label");
+  const numInput3 = document.createElement("input");
+
   checkbox1.id = `checkbox1ForLineLoadIndex${currentIndex}`;
   checkbox1.type = "checkbox";
-  // checkbox1.classList.add("fullLoadCheckbox");
   checkbox1.checked = true;
   checkbox1.addEventListener("change", fullLoadCheckboxChangeHandler);
-  
+
   labelForCheckbox1.htmlFor = `checkbox1ForLineLoadIndex${currentIndex}`;
   labelForCheckbox1.textContent = "Last over hele modellens længde?";
-  
-  subDiv1.id = `subDiv1LineLoadIndex${currentIndex}`;
-  subDiv1.classList.add("hidden");
-  
+
+  div2.id = `div2LineLoadIndex${currentIndex}`;
+  div2.classList.add("div2");
+  div2.classList.add("hidden");
+
+  subDiv1.classList.add("subDiv1");
+  subDiv2.classList.add("subDiv2");
+
   numInput2.id = `numInput2ForLineLoadIndex${currentIndex}`;
   numInput2.type = "number";
   numInput2.placeholder = "0,0";
@@ -449,10 +493,10 @@ function addLineLoad() {
     }
     updateLoadDrawings();
   });
-  
+
   labelForNumInput2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
   labelForNumInput2.textContent = "Start: ";
-  
+
   numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
   numInput3.placeholder = `${spanLengthDecimal}`;
@@ -472,103 +516,20 @@ function addLineLoad() {
   labelForNumInput3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
   labelForNumInput3.textContent = "Udbredelse: ";
 
-  paragraph1.classList.add("smallFont");
-  paragraph1.classList.add("whiteSpacePre");
+  subDiv1.appendChild(labelForNumInput2);
+  subDiv1.appendChild(numInput2);
+  subDiv1.insertAdjacentHTML("beforeend", "m");
+  subDiv2.appendChild(labelForNumInput3);
+  subDiv2.appendChild(numInput3);
+  subDiv2.insertAdjacentHTML("beforeend", "m");
 
-  paragraph1.appendChild(labelForNumInput2);
-  paragraph1.appendChild(numInput2);
-  paragraph1.insertAdjacentHTML("beforeend", "m  ");
-  paragraph1.appendChild(labelForNumInput3);
-  paragraph1.appendChild(numInput3);
-  paragraph1.insertAdjacentHTML("beforeend", "m");
-  subDiv1.appendChild(paragraph1);
+  div2.appendChild(subDiv1);
+  div2.appendChild(subDiv2);
 
   form.appendChild(labelForCheckbox1);
   form.appendChild(checkbox1);
-  form.appendChild(subDiv1);
+  form.appendChild(div2);
   // start and length inputs of load added
-
-  // adding input for size of load
-  const paragraph2 = document.createElement("p");
-  const labelForLoadSizeInput = document.createElement("label");
-  const loadSizeInput = document.createElement("input");
-  // const numOfDecimalsOnLoad = document.createElement("input");
-
-  paragraph2.classList = "whiteSpacePre";
-
-  loadSizeInput.id = `loadSizeInputLineLoadIndex${currentIndex}`;
-  loadSizeInput.type = "number";
-  loadSizeInput.step = "any";
-  // loadSizeInput.placeholder = `${spanLengthDecimal}`;
-  loadSizeInput.classList.add("numInput");
-  loadSizeInput.classList.add("loadInput");
-  loadSizeInput.classList.add("noSpinners");
-
-  labelForLoadSizeInput.htmlFor = loadSizeInput;
-  labelForLoadSizeInput.textContent = "Størrelse: ";
-
-  loadSizeInput.addEventListener("change", updateLoadSizes);
-
-  const loadScaleInput = document.createElement("input");
-  loadScaleInput.id = `loadScaleInputLineLoadIndex${currentIndex}`;
-  loadScaleInput.type = "number";
-  if (currentIndex === 0) {
-    loadScaleInput.valueAsNumber = 10;
-  } else {
-    loadScaleInput.valueAsNumber = document.getElementById(
-      `loadScaleInputLineLoadIndex${currentIndex - 1}`
-    ).valueAsNumber;
-  }
-  loadScaleInput.classList.add("numInput");
-  loadScaleInput.classList.add("scaleSpinner");
-  loadScaleInput.classList.add("spinnerOpacity1");
-  loadScaleInput.addEventListener("change", updateLoadSizes);
-
-  // numOfDecimalsOnLoad.id = `numOfDecimalsOnLoadIndex${currentIndex}`;
-  // numOfDecimalsOnLoad.type = "number";
-  // numOfDecimalsOnLoad.classList.add("decimalSpinner");
-  // numOfDecimalsOnLoad.value = 1;
-
-  // numOfDecimalsOnLoad.addEventListener("change", changeDecimals(loadSizeInput, numOfDecimalsOnLoad.valueAsNumber));
-
-  paragraph2.appendChild(labelForLoadSizeInput);
-  paragraph2.appendChild(loadSizeInput);
-  paragraph2.insertAdjacentHTML("beforeend", " kN/m   ");
-  paragraph2.insertAdjacentHTML("beforeend", "Skala");
-  paragraph2.appendChild(loadScaleInput);
-
-  form.appendChild(paragraph2);
-
-  // input for size of load added
-
-  const paragraph3 = document.createElement("p");
-  const loadColorPicker = document.createElement("input");
-  const loadColorPickerWrapper = document.createElement("p");
-  const loadColorPickerLabel = document.createElement("label");
-
-  loadColorPicker.type = "color";
-  loadColorPicker.id = `loadColorLineLoadIndex${currentIndex}`;
-  loadColorPicker.classList.add("colorPicker");
-  loadColorPicker.value = "black";
-  loadColorPicker.style.backgroundColor = loadColorPicker.value;
-
-  loadColorPickerWrapper.id = `loadColorPickerWrapperLineLoadIndex${currentIndex}`;
-  loadColorPickerWrapper.classList.add("colorPickerWrapper");
-  loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
-
-  loadColorPickerLabel.htmlFor = loadColorPickerWrapper;
-  loadColorPickerLabel.textContent = "Farve på last:";
-
-  loadColorPicker.addEventListener("change", function () {
-    lineLoadObject.color = loadColorPicker.value;
-    loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
-    updateLoadDrawings();
-  });
-
-  loadColorPickerWrapper.appendChild(loadColorPicker);
-  paragraph3.appendChild(loadColorPickerLabel);
-  paragraph3.appendChild(loadColorPickerWrapper);
-  form.appendChild(paragraph3);
 
   const settingsModal = document.createElement("div");
   const labelPlacementText = document.createElement("p");
@@ -618,7 +579,7 @@ function addLineLoad() {
     } else if (radio4.checked) {
       position = "bottom_right";
     }
-    lineLoadObject.labelPlace = position;
+    lineLoadObject.labelPos = position;
 
     updateLoadDrawings();
   }
@@ -636,16 +597,76 @@ function addLineLoad() {
   exitIconContainer.appendChild(exitIcon);
   settingsModal.appendChild(exitIconContainer);
 
+  const loadScaleSettings = document.createElement("div");
+  const loadScaleInput = document.createElement("input");
+  const labelForLoadScaleInput = document.createElement("label");
+
+  loadScaleSettings.classList.add("loadScaleSettings");
+
+  loadScaleInput.id = `loadScaleInputLineLoadIndex${currentIndex}`;
+  loadScaleInput.type = "number";
+  if (currentIndex === 0) {
+    loadScaleInput.valueAsNumber = 10;
+  } else {
+    loadScaleInput.valueAsNumber = document.getElementById(
+      `loadScaleInputLineLoadIndex${currentIndex - 1}`
+    ).valueAsNumber;
+  }
+  loadScaleInput.classList.add("numInput");
+  loadScaleInput.classList.add("scaleSpinner");
+  loadScaleInput.classList.add("spinnerOpacity1");
+  loadScaleInput.addEventListener("change", updateLoadSizes);
+
+  labelForLoadScaleInput.htmlFor = `loadScaleInputLineLoadIndex${currentIndex}`;
+  labelForLoadScaleInput.textContent = "Vertikal skala:";
+
+  loadScaleSettings.appendChild(labelForLoadScaleInput);
+  loadScaleSettings.appendChild(loadScaleInput);
+  settingsModal.appendChild(loadScaleSettings);
+
+  const colorPickerDiv = document.createElement("div");
+  const loadColorPicker = document.createElement("input");
+  const loadColorPickerWrapper = document.createElement("p");
+  const loadColorPickerLabel = document.createElement("label");
+
+  colorPickerDiv.classList.add("colorPickerDiv");
+
+  loadColorPicker.type = "color";
+  loadColorPicker.id = `loadColorLineLoadIndex${currentIndex}`;
+  loadColorPicker.classList.add("colorPicker");
+  loadColorPicker.value = "black";
+  loadColorPicker.style.backgroundColor = loadColorPicker.value;
+
+  loadColorPickerWrapper.id = `loadColorPickerWrapperLineLoadIndex${currentIndex}`;
+  loadColorPickerWrapper.classList.add("colorPickerWrapper");
+  loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
+
+  loadColorPickerLabel.htmlFor = loadColorPickerWrapper;
+  loadColorPickerLabel.textContent = "Farve på last:";
+
+  loadColorPicker.addEventListener("change", function () {
+    lineLoadObject.color = loadColorPicker.value;
+    loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
+    updateLoadDrawings();
+  });
+
+  loadColorPickerWrapper.appendChild(loadColorPicker);
+  colorPickerDiv.appendChild(loadColorPickerLabel);
+  colorPickerDiv.appendChild(loadColorPickerWrapper);
+  settingsModal.appendChild(colorPickerDiv);
+
   const sameLineSettings = document.createElement("div");
   const checkbox2 = document.createElement("input");
   const labelForCheckbox2 = document.createElement("label");
 
-  sameLineSettings.classList.add("sameLineSettings")
+  sameLineSettings.classList.add("sameLineSettings");
   checkbox2.type = "checkbox";
   checkbox2.id = `checkbox2ForLineLoadIndex${currentIndex}`;
   labelForCheckbox2.htmlFor = `checkbox2ForLineLoadIndex${currentIndex}`;
   labelForCheckbox2.textContent = "Tegn linjelast på samme linje som forrige?";
-  if (currentIndex === 0) {sameLineSettings.classList.add("hidden");}
+  if (currentIndex === 0) {
+    sameLineSettings.classList.add("hidden");
+  }
 
   sameLineSettings.appendChild(labelForCheckbox2);
   sameLineSettings.appendChild(checkbox2);
@@ -663,9 +684,11 @@ function addLineLoad() {
   deleteLoadBtn.textContent = "Slet linjelast";
   deleteLoadBtn.addEventListener("click", function () {
     currentIndex = parseInt(mainDiv.id.slice(13));
-    if (currentIndex === 0) {sameLineSettings.classList.add("hidden");}
+    if (currentIndex === 0) {
+      sameLineSettings.classList.add("hidden");
+    }
     lineLoads.splice(currentIndex, 1);
-    reduceIndexInLineLoads(currentIndex);
+    reduceIndexInLoads("LINELOAD", currentIndex);
     mainDiv.parentNode.removeChild(mainDiv);
     updateLineLoadStartY();
     updateLoadSizes();
@@ -701,21 +724,39 @@ function updateLoadDrawings() {
       lineLoads[i].density
     );
   }
+  for (let j = 0; j < pointLoads.length; j++) {
+    if (
+      isNaN(
+        document.getElementById(`loadSizeInputPointLoadIndex${j}`).valueAsNumber
+      )
+    ) {
+      continue;
+    }
+    drawArrowForLoad(
+      pointLoads[j].X,
+      pointLoads[j].Y,
+      pointLoads[j].size,
+      pointLoads[j].color
+    );
+  }
+
   addLineLoadLabel();
 }
 
-function updateLineLoadStartY () {
+function updateLineLoadStartY() {
   for (let j = 0; j < lineLoads.length; j++) {
     if (j === 0) {
       lineLoads[j].startY = lineCoorY - 15;
-    } else if (document.getElementById(`checkbox2ForLineLoadIndex${j}`).checked) {
+    } else if (
+      document.getElementById(`checkbox2ForLineLoadIndex${j}`).checked
+    ) {
       lineLoads[j].startY = lineLoads[j - 1].startY;
     } else {
       lineLoads[j].startY =
         lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
     }
-}
-updateLoadDrawings();
+  }
+  updateLoadDrawings();
 }
 
 function updateLoadSizes() {
@@ -725,7 +766,14 @@ function updateLoadSizes() {
       document.getElementById(`loadScaleInputLineLoadIndex${i}`).valueAsNumber *
       1.5;
   }
+  for (let i = 0; i < pointLoads.length; i++) {
+    pointLoads[i].size =
+      document.getElementById(`loadSizeInputPointLoadIndex${i}`).valueAsNumber *
+      document.getElementById(`loadScaleInputPointLoadIndex${i}`).valueAsNumber *
+      1.5;
+  }
   updateLineLoadStartY();
+  updatePointLoadY();
   updateLoadDrawings();
 }
 
@@ -734,12 +782,10 @@ function fullLoadCheckboxChangeHandler() {
     if (document.getElementById(`checkbox1ForLineLoadIndex${i}`).checked) {
       lineLoads[i].startX = lineCoorLeftX;
       lineLoads[i].length = lineLength;
-      document
-        .getElementById(`subDiv1LineLoadIndex${i}`)
-        .classList.add("hidden");
+      document.getElementById(`div2LineLoadIndex${i}`).classList.add("hidden");
     } else {
       document
-        .getElementById(`subDiv1LineLoadIndex${i}`)
+        .getElementById(`div2LineLoadIndex${i}`)
         .classList.remove("hidden");
     }
   }
@@ -806,19 +852,19 @@ function addLineLoadLabel() {
     let alignment;
     const xOffset = 5;
     const yOffset = 10;
-    if (lineLoads[i].labelPlace === "top_right") {
+    if (lineLoads[i].labelPos === "top_right") {
       x = lineLoads[i].startX + lineLoads[i].length + xOffset;
       y = lineLoads[i].startY - lineLoads[i].size + yOffset;
       alignment = "left";
-    } else if (lineLoads[i].labelPlace === "bottom_right") {
+    } else if (lineLoads[i].labelPos === "bottom_right") {
       x = lineLoads[i].startX + lineLoads[i].length + xOffset;
       y = lineLoads[i].startY - yOffset / 2;
       alignment = "left";
-    } else if (lineLoads[i].labelPlace === "top_left") {
+    } else if (lineLoads[i].labelPos === "top_left") {
       x = lineLoads[i].startX - xOffset;
       y = lineLoads[i].startY - lineLoads[i].size + yOffset;
       alignment = "right";
-    } else if (lineLoads[i].labelPlace === "bottom_left") {
+    } else if (lineLoads[i].labelPos === "bottom_left") {
       x = lineLoads[i].startX - xOffset;
       y = lineLoads[i].startY - yOffset / 2;
       alignment = "right";
@@ -835,11 +881,26 @@ function adjustHorizontalScale() {
   updateLoadDrawings();
 }
 
-function reduceIndexInLineLoads(deletedIndex) {
-  const lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
-  const lineLoadLabels = document.querySelectorAll(".lineLoadDiv label");
+function reduceIndexInLoads(type, deletedIndex) {
+  let lineLoadIds;
+  let lineLoadLabels;
+  let pointLoadIds;
+  let pointLoadLabels;
+  if (type === "LINELOAD") {
+  lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
+  lineLoadLabels = document.querySelectorAll(".lineLoadDiv label");
+} else if (type === "POINTLOAD") {
+  pointLoadIds = document.querySelectorAll("[id*='ointLoadIndex']");
+  pointLoadLabels = document.querySelectorAll(".pointLoadDiv label");
+}
   const startingIndex = deletedIndex + 1;
-  for (let element of lineLoadIds) {
+  let searchedIds;
+  if (type === "LINELOAD") {
+    searchedIds = lineLoadIds;
+  } else if (type === "POINTLOAD") {
+    searchedIds = pointLoadIds;
+  }
+  for (let element of searchedIds) {
     let id = element.id;
     let idIndex;
     if (!isNaN(parseInt(id.slice(-3)))) {
@@ -853,14 +914,23 @@ function reduceIndexInLineLoads(deletedIndex) {
       continue;
     }
     indexLength = String(idIndex).length;
-    const idText = id.slice(0, -indexLength)
-    , newIdIndex = idIndex - 1;
+    const idText = id.slice(0, -indexLength),
+      newIdIndex = idIndex - 1;
     if (idText === "lineLoadIndex") {
       element.firstChild.innerHTML = `Linjelast #${idIndex}`;
     }
+    if (idText === "pointLoadIndex") {
+      element.firstChild.innerHTML = `Punktlast #${idIndex}`;
+    }
     element.id = idText + newIdIndex;
   }
-  for (const label of lineLoadLabels) {
+  let searchedLabels;
+  if (type === "LINELOAD") {
+    searchedLabels = lineLoadLabels;
+  } else if (type === "POINTLOAD") {
+    searchedLabels = pointLoadLabels;
+  }
+  for (const label of searchedLabels) {
     let labelFor = label.htmlFor;
     let labelForIndex;
     if (!isNaN(parseInt(labelFor.slice(-3)))) {
@@ -874,16 +944,269 @@ function reduceIndexInLineLoads(deletedIndex) {
       continue;
     }
     indexLength = String(labelForIndex).length;
-    const labelForText = labelFor.slice(0, -indexLength)
-    , newLabelForIndex = labelForIndex - 1;
+    const labelForText = labelFor.slice(0, -indexLength),
+      newLabelForIndex = labelForIndex - 1;
     label.htmlFor = labelForText + newLabelForIndex;
   }
 }
 
-function drawPointLoad (X, Y, length, color) {
+function addPointLoad() {
+  let currentIndex = pointLoads.length;
+  const pointLoadObject = {
+    X: lineCoorLeftX,
+    Y: null,
+    size: null,
+    color: "black",
+    labelPos: "top_right"
+  };
 
+  const mainDiv = document.createElement("div");
+  const h5 = document.createElement("h5");
+  const form = document.createElement("form");
+
+  
+  mainDiv.id = `pointLoadIndex${currentIndex}`;
+  mainDiv.classList.add("loadDiv");
+  mainDiv.classList.add("pointLoadDiv");
+  
+  h5.textContent = `Punktlast #${currentIndex + 1}`;
+  
+  const settingsIconContainer = document.createElement("div");
+  const settingsIcon = document.createElement("img");
+  
+  settingsIcon.src = "./resources/data/images/settingsicon.png";
+  settingsIcon.classList.add("settingsIcon");
+  
+  settingsIconContainer.classList.add("settingsIconContainer");
+  
+  function toggleSettingsModal() {
+    settingsModal.classList.toggle("pseudoHidden");
+  }
+  
+  settingsIcon.addEventListener("click", toggleSettingsModal);
+  
+  settingsIconContainer.appendChild(settingsIcon);
+  
+  // adding input for size of load
+  
+  const div1 = document.createElement("div");
+  const labelForLoadSizeInput = document.createElement("label");
+  const loadSizeInput = document.createElement("input");
+  
+  div1.classList.add("div1");
+  
+  loadSizeInput.id = `loadSizeInputPointLoadIndex${currentIndex}`;
+  loadSizeInput.type = "number";
+  loadSizeInput.step = "any";
+  // loadSizeInput.placeholder = `${spanLengthDecimal}`;
+  loadSizeInput.classList.add("numInput");
+  loadSizeInput.classList.add("loadInput");
+  loadSizeInput.classList.add("noSpinners");
+  
+  labelForLoadSizeInput.htmlFor = loadSizeInput;
+  labelForLoadSizeInput.textContent = "Størrelse: ";
+  
+  loadSizeInput.addEventListener("change", updateLoadSizes);
+  
+  div1.appendChild(labelForLoadSizeInput);
+  div1.appendChild(loadSizeInput);
+  div1.insertAdjacentHTML("beforeend", "kN");
+  
+  form.appendChild(div1);
+
+// ------------ Settings modal ----------
+
+  const settingsModal = document.createElement("div");
+  const labelPlacementText = document.createElement("p");
+  const labelPlacementSettings = document.createElement("div");
+  const radio1 = document.createElement("input");
+  const radio2 = document.createElement("input");
+  const radio3 = document.createElement("input");
+  const radio4 = document.createElement("input");
+  const staticModelSprite = document.createElement("img");
+  const exitIconContainer = document.createElement("div");
+  const exitIcon = document.createElement("img");
+
+  settingsModal.id = `settingsModalPointLoadIndex${currentIndex}`;
+  settingsModal.classList.add("settingsModal");
+  settingsModal.classList.add("pseudoHidden");
+  labelPlacementText.textContent = "Placering af label";
+  labelPlacementSettings.classList.add("pointLoadLabelPlacementSettings");
+  staticModelSprite.src = "./resources/data/images/pointloadarrow.png";
+  radio1.type = "radio";
+  radio1.name = `positionRadioPointLoadIndex${currentIndex}`;
+  radio1.classList.add("radio1");
+  radio1.addEventListener("change", changeLabelPosition);
+  radio2.type = "radio";
+  radio2.name = `positionRadioPointLoadIndex${currentIndex}`;
+  radio2.classList.add("radio2");
+  radio2.addEventListener("change", changeLabelPosition);
+  radio3.type = "radio";
+  radio3.name = `positionRadioPointLoadIndex${currentIndex}`;
+  radio3.classList.add("radio3");
+  radio3.checked = true;
+  radio3.addEventListener("change", changeLabelPosition);
+  radio4.type = "radio";
+  radio4.name = `positionRadioPointLoadIndex${currentIndex}`;
+  radio4.classList.add("radio4");
+  radio4.addEventListener("change", changeLabelPosition);
+  exitIconContainer.classList.add("exitIconContainer");
+  exitIcon.src = "./resources/data/images/crossiconblack.png";
+
+  function changeLabelPosition() {
+    let position;
+    if (radio1.checked) {
+      position = "top_left";
+    } else if (radio2.checked) {
+      position = "bottom_left";
+    } else if (radio3.checked) {
+      position = "top_right";
+    } else if (radio4.checked) {
+      position = "bottom_right";
+    }
+    pointLoadObject.labelPos = position;
+
+    updateLoadDrawings();
+  }
+  
+  exitIcon.addEventListener("click", toggleSettingsModal);
+
+  settingsIconContainer.appendChild(settingsModal);
+  settingsModal.appendChild(labelPlacementText);
+  settingsModal.appendChild(labelPlacementSettings);
+  labelPlacementSettings.appendChild(radio1);
+  labelPlacementSettings.appendChild(radio2);
+  labelPlacementSettings.appendChild(staticModelSprite);
+  labelPlacementSettings.appendChild(radio3);
+  labelPlacementSettings.appendChild(radio4);
+  exitIconContainer.appendChild(exitIcon);
+  settingsModal.appendChild(exitIconContainer);
+
+  const loadScaleSettings = document.createElement("div");
+  const loadScaleInput = document.createElement("input");
+  const labelForLoadScaleInput = document.createElement("label");
+
+  loadScaleSettings.classList.add("loadScaleSettings");
+
+  loadScaleInput.id = `loadScaleInputPointLoadIndex${currentIndex}`;
+  loadScaleInput.type = "number";
+  if (currentIndex === 0) {
+    loadScaleInput.valueAsNumber = 10;
+  } else {
+    loadScaleInput.valueAsNumber = document.getElementById(
+      `loadScaleInputPointLoadIndex${currentIndex - 1}`
+    ).valueAsNumber;
+  }
+  loadScaleInput.classList.add("numInput");
+  loadScaleInput.classList.add("scaleSpinner");
+  loadScaleInput.classList.add("spinnerOpacity1");
+  loadScaleInput.addEventListener("change", updateLoadSizes);
+
+  labelForLoadScaleInput.htmlFor = `loadScaleInputPointLoadIndex${currentIndex}`;
+  labelForLoadScaleInput.textContent = "Vertikal skala:";
+
+  loadScaleSettings.appendChild(labelForLoadScaleInput);
+  loadScaleSettings.appendChild(loadScaleInput);
+  settingsModal.appendChild(loadScaleSettings);
+
+  const colorPickerDiv = document.createElement("div");
+  const loadColorPicker = document.createElement("input");
+  const loadColorPickerWrapper = document.createElement("p");
+  const loadColorPickerLabel = document.createElement("label");
+
+  colorPickerDiv.classList.add("colorPickerDiv");
+
+  loadColorPicker.type = "color";
+  loadColorPicker.id = `loadColorLineLoadIndex${currentIndex}`;
+  loadColorPicker.classList.add("colorPicker");
+  loadColorPicker.value = "black";
+  loadColorPicker.style.backgroundColor = loadColorPicker.value;
+
+  loadColorPickerWrapper.id = `loadColorPickerWrapperPointLoadIndex${currentIndex}`;
+  loadColorPickerWrapper.classList.add("colorPickerWrapper");
+  loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
+
+  loadColorPickerLabel.htmlFor = loadColorPickerWrapper;
+  loadColorPickerLabel.textContent = "Farve på last:";
+
+  loadColorPicker.addEventListener("change", function () {
+    pointLoadObject.color = loadColorPicker.value;
+    loadColorPickerWrapper.style.backgroundColor = loadColorPicker.value;
+    updateLoadDrawings();
+  });
+
+  loadColorPickerWrapper.appendChild(loadColorPicker);
+  colorPickerDiv.appendChild(loadColorPickerLabel);
+  colorPickerDiv.appendChild(loadColorPickerWrapper);
+  settingsModal.appendChild(colorPickerDiv);
+
+  // ----------- End of settingsmodal --------
+
+  const deleteLoadBtn = document.createElement("button");
+  deleteLoadBtn.classList.add("btn1");
+  deleteLoadBtn.classList.add("deleteLoadButton");
+  deleteLoadBtn.textContent = "Slet punktlast";
+  deleteLoadBtn.addEventListener("click", function () {
+    currentIndex = parseInt(mainDiv.id.slice(14));
+    pointLoads.splice(currentIndex, 1);
+    reduceIndexInLoads("POINTLOAD", currentIndex);
+    mainDiv.parentNode.removeChild(mainDiv);
+    updatePointLoadY();
+    updateLoadSizes();
+  });
+  
+  mainDiv.appendChild(h5);
+  mainDiv.appendChild(deleteLoadBtn);
+  mainDiv.appendChild(settingsIconContainer);
+  mainDiv.appendChild(form);
+  
+  pointLoadDiv.appendChild(mainDiv);
+  
+  pointLoads.push(pointLoadObject);
+  updatePointLoadY();
 }
 
+function updatePointLoadY() {
+  if (pointLoads.length === 0) {
+    return;
+  } else {
+    let currentIndex = -1
+    for (const pointLoadObject of pointLoads) {
+      currentIndex++
+      if (lineLoads.length !== 0) {
+        let a = [];
+        for (let i = lineLoads.length - 1; i >= 0; i--) {
+          if (
+            lineLoads[i].startX <= pointLoadObject.X &&
+            pointLoadObject.X <= lineLoads[i].startX + lineLoads[i].length
+            ) {
+              a.push(lineLoads[i].startY - lineLoads[i].size);
+            }
+          }
+          if (a.length !== 0) {
+            pointLoadObject.Y = Math.min(...a) - 10;
+          } else {
+          pointLoadObject.Y = lineCoorY - 15;
+        }
+      } else {
+        pointLoadObject.Y = lineCoorY - 15;
+      }
+
+      let b = 0;
+      if (pointLoads.length !== 0) {
+        for (let i = 0; i < pointLoads.length; i++) {
+          if (i < currentIndex) {
+          b =
+            pointLoads[i].X === pointLoadObject.X
+              ? b + pointLoads[i].size + 10
+              : b;
+          }
+        }
+      }
+      pointLoadObject.Y = pointLoadObject.Y - b;
+    }
+  }
+}
 // function changeDecimals(id, value)
 
 // ---------------------------- END OF FUNCTIONS ---------------------------------
@@ -907,6 +1230,8 @@ horizontalScaleInput.value = INITIALSCALE / INITIALSCALE;
 // ------------------------------- EVENTLISTENERS ETC --------------------------
 
 addLineLoadButton.addEventListener("click", addLineLoad);
+
+addPointLoadButton.addEventListener("click", addPointLoad);
 
 window.addEventListener("resize", resizeCanvas);
 
@@ -974,7 +1299,7 @@ document
       .classList.toggle("pseudoHidden");
   });
 
-  document
+document
   .getElementById("lineLoadsSettingsExitIcon")
   .addEventListener("click", function () {
     document
@@ -998,12 +1323,30 @@ document
       .classList.toggle("pseudoHidden");
   });
 
-document.getElementById("allLineLoadsScaleInput").addEventListener("change", function () {
-const lineloadScaleInputs = document.querySelectorAll("[id*='loadScaleInputLineLoadIndex']");
-const allLineLoadsScale = document.getElementById("allLineLoadsScaleInput").valueAsNumber;
-for (const scaleInput of lineloadScaleInputs) {
-  scaleInput.value = allLineLoadsScale;
-}
-updateLoadSizes();
-});
+document
+  .getElementById("allLineLoadsScaleInput")
+  .addEventListener("change", function () {
+    const lineloadScaleInputs = document.querySelectorAll(
+      "[id*='loadScaleInputLineLoadIndex']"
+    );
+    const allLineLoadsScale = document.getElementById("allLineLoadsScaleInput")
+      .valueAsNumber;
+    for (const scaleInput of lineloadScaleInputs) {
+      scaleInput.value = allLineLoadsScale;
+    }
+    updateLoadSizes();
+  });
 
+ document
+  .getElementById("allPointLoadsScaleInput")
+  .addEventListener("change", function () {
+    const lineloadScaleInputs = document.querySelectorAll(
+      "[id*='loadScaleInputPointLoadIndex']"
+    );
+    const allPointLoadsScale = document.getElementById("allPointLoadsScaleInput")
+      .valueAsNumber;
+    for (const scaleInput of pointloadScaleInputs) {
+      scaleInput.value = allPointLoadsScale;
+    }
+    updateLoadSizes();
+  });
