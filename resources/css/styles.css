@@ -301,8 +301,32 @@ margin-left: 5px;
   padding-right: 5px;
 }
 
+.loadSizeDiv {
+  display: block;
+}
+
 .div1 {
   display: flex;
+  align-items: center;
+}
+
+.div1 .subDivTrapezoid {
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.div1 .subDivTrapezoid label{
+  font-size: 10px;
+}
+
+.div1 .subDivTrapezoid input{
+margin-left: 0px;
+}
+
+.loadSizeRightDiv label{
+margin-left: 15px;
 }
 
 .loadDiv .settingsIconContainer {

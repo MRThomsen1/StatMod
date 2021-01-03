@@ -19,11 +19,6 @@ let spanLengthDecimal;
 let numOfDecimals = 1;
 
 let lineLength = setLineCoordinates(scale);
-let lineClearCoordinates = {};
-let loadRectanglesX = [];
-let loadRectanglesY = [];
-let loadRectanglesW = [];
-let loadRectanglesH = [];
 
 let lineLoads = [];
 let pointLoads = [];
@@ -35,8 +30,6 @@ const addPointLoadButton = document.getElementById("addPointLoadBtn");
 
 const lineLoadDiv = document.getElementById("lineLoadDiv");
 const pointLoadDiv = document.getElementById("pointLoadDiv");
-
-const clearButton = document.getElementById("clearBtn");
 
 const horizontalScaleInput = document.getElementById("horizontalScale");
 
@@ -277,14 +270,22 @@ function drawArrowForLoad(X, Y, length, color) {
   ctx.fill();
 }
 
-function drawLineLoad(start, length, size, yPosition, color, density) {
+function drawLineLoad(
+  start,
+  length,
+  sizeLeft,
+  sizeRight,
+  yPosition,
+  color,
+  density
+) {
   const lineLoadCoordinates = [
     start,
     yPosition,
     start,
-    yPosition - size,
+    yPosition - sizeLeft,
     start + length,
-    yPosition - size,
+    yPosition - sizeRight,
     start + length,
     yPosition,
   ];
@@ -299,10 +300,6 @@ function drawLineLoad(start, length, size, yPosition, color, density) {
     ctx.lineTo(lineLoadCoordinates[i], lineLoadCoordinates[i + 1]);
     ctx.stroke();
   }
-  loadRectanglesX.push(start - 1);
-  loadRectanglesY.push(yPosition - size - 1);
-  loadRectanglesW.push(length + 2);
-  loadRectanglesH.push(size + 2);
 
   const INITIALDISTANCE = 25;
   const distance = INITIALDISTANCE * density;
@@ -332,27 +329,27 @@ function drawLineLoad(start, length, size, yPosition, color, density) {
   }
 
   for (let i = 0; i < arrowXCoordinatesLeft.length; i++) {
-    drawArrowForLoad(arrowXCoordinatesLeft[i], yPosition, size, color);
+    const x1 = start;
+    const x2 = start + length;
+    const y1 = sizeLeft;
+    const y2 = sizeRight;
+    const arrowX = arrowXCoordinatesLeft[i];
+    const arrowSize = y1 + ((y2 - y1) / (x2 - x1)) * (arrowX - x1);
+    drawArrowForLoad(arrowX, yPosition, arrowSize, color);
   }
   for (let i = 0; i < arrowXCoordinatesRight.length; i++) {
-    drawArrowForLoad(arrowXCoordinatesRight[i], yPosition, size, color);
+    const x1 = start;
+    const x2 = start + length;
+    const y1 = sizeLeft;
+    const y2 = sizeRight;
+    const arrowX = arrowXCoordinatesRight[i];
+    const arrowSize = y1 + ((y2 - y1) / (x2 - x1)) * (arrowX - x1);
+    drawArrowForLoad(arrowX, yPosition, arrowSize, color);
   }
 }
 
 function clearLoads() {
   ctx.clearRect(0, 0, canvas.width, lineCoorY - 5);
-  /*for (let i = 0; i < loadRectanglesX.length; i++) {
-    ctx.clearRect(
-      loadRectanglesX[i],
-      loadRectanglesY[i],
-      loadRectanglesW[i],
-      loadRectanglesH[i]
-    );
-  }*/
-  loadRectanglesX = [];
-  loadRectanglesY = [];
-  loadRectanglesW = [];
-  loadRectanglesH = [];
 }
 
 function isOdd(x) {
@@ -372,10 +369,11 @@ function addLineLoad() {
   const lineLoadObject = {
     startX: lineCoorLeftX,
     length: lineLength,
-    size: null,
+    sizeLeft: null,
+    sizeRight: null,
     startY: null,
     color: "black",
-    labelPos: "top_right",
+    labelPos: "TOP_RIGHT",
     density: 1,
     verticalScale: 10,
   };
@@ -415,38 +413,86 @@ function addLineLoad() {
 
   // adding input for size of load
 
+  const loadSizeDiv = document.createElement("div");
   const div1 = document.createElement("div");
-  const labelForLoadSizeInput = document.createElement("label");
-  const loadSizeInput = document.createElement("input");
+  const subDivTrapezoid = document.createElement("div");
+  const checkboxTrapezoidLoad = document.createElement("input");
+  const labelForCheckboxTrapezoidLoad = document.createElement("label");
+  const loadSizeLeftInput = document.createElement("input");
+  const labelForLoadLeftSizeInput = document.createElement("label");
 
+  loadSizeDiv.classList.add("loadSizeDiv");
   div1.classList.add("div1");
-  // const numOfDecimalsOnLoad = document.createElement("input");
 
-  loadSizeInput.id = `loadSizeInputLineLoadIndex${currentIndex}`;
-  loadSizeInput.type = "number";
-  loadSizeInput.step = "any";
-  // loadSizeInput.placeholder = `${spanLengthDecimal}`;
-  loadSizeInput.classList.add("numInput");
-  loadSizeInput.classList.add("loadInput");
-  loadSizeInput.classList.add("noSpinners");
+  loadSizeLeftInput.id = `loadSizeLeftInputLineLoadIndex${currentIndex}`;
+  loadSizeLeftInput.type = "number";
+  loadSizeLeftInput.step = "any";
+  loadSizeLeftInput.classList.add("numInput");
+  loadSizeLeftInput.classList.add("loadInput");
+  loadSizeLeftInput.classList.add("noSpinners");
 
-  labelForLoadSizeInput.htmlFor = `loadSizeInputLineLoadIndex${currentIndex}`;
-  labelForLoadSizeInput.textContent = "Størrelse:";
+  labelForLoadLeftSizeInput.htmlFor = `loadSizeLeftInputLineLoadIndex${currentIndex}`;
+  labelForLoadLeftSizeInput.textContent = "Størrelse:";
 
-  loadSizeInput.addEventListener("change", updateLoadSizes);
-
-  // numOfDecimalsOnLoad.id = `numOfDecimalsOnLoadIndex${currentIndex}`;
-  // numOfDecimalsOnLoad.type = "number";
-  // numOfDecimalsOnLoad.classList.add("decimalSpinner");
-  // numOfDecimalsOnLoad.value = 1;
-
-  // numOfDecimalsOnLoad.addEventListener("change", changeDecimals(loadSizeInput, numOfDecimalsOnLoad.valueAsNumber));
-
-  div1.appendChild(labelForLoadSizeInput);
-  div1.appendChild(loadSizeInput);
+  loadSizeLeftInput.addEventListener("change", updateLoadSizes);
+  div1.appendChild(labelForLoadLeftSizeInput);
+  div1.appendChild(loadSizeLeftInput);
   div1.insertAdjacentHTML("beforeend", "kN/m");
 
-  form.appendChild(div1);
+  loadSizeDiv.appendChild(div1);
+
+  subDivTrapezoid.classList.add("subDivTrapezoid");
+
+  checkboxTrapezoidLoad.type = "checkbox";
+  checkboxTrapezoidLoad.id = `checkboxTrapezoidLineLoadIndex${currentIndex}`;
+
+  labelForCheckboxTrapezoidLoad.htmlFor = `checkboxTrapezoidLineLoadIndex${currentIndex}`;
+  labelForCheckboxTrapezoidLoad.textContent = "Trapezformet";
+
+  subDivTrapezoid.appendChild(labelForCheckboxTrapezoidLoad);
+  subDivTrapezoid.appendChild(checkboxTrapezoidLoad);
+  div1.appendChild(subDivTrapezoid);
+
+  loadSizeDiv.appendChild(div1);
+
+  const loadSizeRightDiv = document.createElement("div");
+  loadSizeRightDiv.classList.add("loadSizeRightDiv");
+  loadSizeRightDiv.classList.add("hidden");
+  const loadSizeRightInput = document.createElement("input");
+  const labelForLoadRightSizeInput = document.createElement("label");
+
+  loadSizeRightInput.id = `loadSizeRightInputLineLoadIndex${currentIndex}`;
+  loadSizeRightInput.type = "number";
+  loadSizeRightInput.step = "any";
+  loadSizeRightInput.classList.add("numInput");
+  loadSizeRightInput.classList.add("loadInput");
+  loadSizeRightInput.classList.add("noSpinners");
+
+  loadSizeRightInput.addEventListener("change", updateLoadSizes);
+
+  labelForLoadRightSizeInput.htmlFor = `loadSizeRightInputLineLoadIndex${currentIndex}`;
+  labelForLoadRightSizeInput.textContent = "Højre:";
+
+  loadSizeRightDiv.appendChild(labelForLoadRightSizeInput);
+  loadSizeRightDiv.appendChild(loadSizeRightInput);
+  loadSizeRightDiv.insertAdjacentHTML("beforeend", "kN/m");
+
+  loadSizeDiv.appendChild(loadSizeRightDiv);
+
+  form.appendChild(loadSizeDiv);
+
+  checkboxTrapezoidLoad.addEventListener("change", function () {
+    loadSizeRightDiv.classList.toggle("hidden");
+    if (checkboxTrapezoidLoad.checked) {
+      labelForLoadLeftSizeInput.textContent = "Venstre:";
+      labelPositionSettingsForTrapezoid("TRAPEZOID");
+    } else {
+      labelForLoadLeftSizeInput.textContent = "Størrelse:";
+      labelPositionSettingsForTrapezoid("LINEAR");
+    }
+    loadSizeRightInput.value = loadSizeLeftInput.value;
+    updateLoadSizes();
+  });
 
   // input for size of load added
 
@@ -486,13 +532,20 @@ function addLineLoad() {
   numInput2.classList.add("numInput");
   numInput2.classList.add("loadInput");
   numInput2.classList.add("noSpinners");
-  numInput2.addEventListener("change", function () {
-    lineLoadObject.startX = lineCoorLeftX + numInput2.valueAsNumber * scale;
-    if (isNaN(numInput3.valueAsNumber)) {
-      lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
+  numInput2.addEventListener("change", numInput2Handler);
+  numInput2.addEventListener("keydown", numInput2Handler);
+  function numInput2Handler(event) {
+    if (
+      event.type === "change" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      lineLoadObject.startX = lineCoorLeftX + numInput2.valueAsNumber * scale;
+      if (isNaN(numInput3.valueAsNumber)) {
+        lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
+      }
+      updateLoadDrawings();
     }
-    updateLoadDrawings();
-  });
+  }
 
   labelForNumInput2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
   labelForNumInput2.textContent = "Start:";
@@ -504,14 +557,22 @@ function addLineLoad() {
   numInput3.classList.add("numInput");
   numInput3.classList.add("loadInput");
   numInput3.classList.add("noSpinners");
-  numInput3.addEventListener("change", function () {
-    if (isNaN(numInput3.valueAsNumber)) {
-      lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
-    } else {
-      lineLoadObject.length = numInput3.valueAsNumber * scale;
+
+  numInput3.addEventListener("change", numInput3Handler);
+  numInput3.addEventListener("keydown", numInput3Handler);
+  function numInput3Handler(event) {
+    if (
+      event.type === "change" ||
+      (event.type === "keydown" && event.key === "Enter")
+    ) {
+      if (isNaN(numInput3.valueAsNumber)) {
+        lineLoadObject.length = lineLength - numInput2.valueAsNumber * scale;
+      } else {
+        lineLoadObject.length = numInput3.valueAsNumber * scale;
+      }
+      updateLoadDrawings();
     }
-    updateLoadDrawings();
-  });
+  }
 
   labelForNumInput3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
   labelForNumInput3.textContent = "Udbredelse:";
@@ -551,37 +612,76 @@ function addLineLoad() {
   radio1.type = "radio";
   radio1.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio1.classList.add("radio1");
-  radio1.addEventListener("change", changeLabelPosition);
+  radio1.addEventListener("click", changeLabelPositionTop);
   radio2.type = "radio";
   radio2.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio2.classList.add("radio2");
-  radio2.addEventListener("change", changeLabelPosition);
+  radio2.addEventListener("click", changeLabelPositionBottom);
   radio3.type = "radio";
   radio3.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio3.classList.add("radio3");
   radio3.checked = true;
-  radio3.addEventListener("change", changeLabelPosition);
+  radio3.addEventListener("click", changeLabelPositionTop);
   radio4.type = "radio";
   radio4.name = `positionRadioLineLoadIndex${currentIndex}`;
   radio4.classList.add("radio4");
-  radio4.addEventListener("change", changeLabelPosition);
+  radio4.addEventListener("click", changeLabelPositionBottom);
   exitIconContainer.classList.add("exitIconContainer");
   exitIcon.src = "./resources/data/images/crossiconblack.png";
+
+  function changeLabelPositionTop() {
+    if (checkboxTrapezoidLoad.checked) {
+      radio1.checked = true;
+      radio3.checked = true;
+      const position = "TOP";
+      lineLoadObject.labelPos = position;
+      updateLoadDrawings();
+    } else {changeLabelPosition();}
+  }
+  function changeLabelPositionBottom() {
+    if (checkboxTrapezoidLoad.checked) {
+      radio2.checked = true;
+      radio4.checked = true;
+      const position = "BOTTOM";
+      lineLoadObject.labelPos = position;
+      updateLoadDrawings();
+    } else {changeLabelPosition();}
+  }
 
   function changeLabelPosition() {
     let position;
     if (radio1.checked) {
-      position = "top_left";
+      position = "TOP_LEFT";
     } else if (radio2.checked) {
-      position = "bottom_left";
+      position = "BOTTOM_LEFT";
     } else if (radio3.checked) {
-      position = "top_right";
+      position = "TOP_RIGHT";
     } else if (radio4.checked) {
-      position = "bottom_right";
+      position = "BOTTOM_RIGHT";
     }
+  
     lineLoadObject.labelPos = position;
-
     updateLoadDrawings();
+  }
+
+  function labelPositionSettingsForTrapezoid(style) {
+    currentIndex = parseInt(mainDiv.id.slice(13));
+    if (style === "LINEAR") {
+      radio1.name = `positionRadioLineLoadIndex${currentIndex}`;
+      radio2.name = `positionRadioLineLoadIndex${currentIndex}`;
+      radio3.name = `positionRadioLineLoadIndex${currentIndex}`;
+      radio4.name = `positionRadioLineLoadIndex${currentIndex}`;
+      radio3.checked = true;
+    } else if (style === "TRAPEZOID") {
+      radio1.name = `positionRadioLeftLineLoadIndex${currentIndex}`;
+      radio2.name = `positionRadioLeftLineLoadIndex${currentIndex}`;
+      radio3.name = `positionRadioRightLineLoadIndex${currentIndex}`;
+      radio4.name = `positionRadioRightLineLoadIndex${currentIndex}`;
+      radio1.checked = true;
+      radio3.checked = true;
+      changeLabelPositionTop();
+    }
+    
   }
 
   exitIcon.addEventListener("click", toggleSettingsModal);
@@ -706,13 +806,14 @@ function addLineLoad() {
 }
 
 function updateLoadDrawings() {
-  clearLoads();
+  drawModel();
   updatePointLoadX();
   updatePointLoadY();
   for (let i = 0; i < lineLoads.length; i++) {
     if (
       isNaN(
-        document.getElementById(`loadSizeInputLineLoadIndex${i}`).valueAsNumber
+        document.getElementById(`loadSizeLeftInputLineLoadIndex${i}`)
+          .valueAsNumber
       )
     ) {
       continue;
@@ -720,7 +821,8 @@ function updateLoadDrawings() {
     drawLineLoad(
       lineLoads[i].startX,
       lineLoads[i].length,
-      lineLoads[i].size,
+      lineLoads[i].sizeLeft,
+      lineLoads[i].sizeRight,
       lineLoads[i].startY,
       lineLoads[i].color,
       lineLoads[i].density
@@ -763,10 +865,21 @@ function updateLineLoadStartY() {
 
 function updateLoadSizes() {
   for (let i = 0; i < lineLoads.length; i++) {
-    lineLoads[i].size =
-      document.getElementById(`loadSizeInputLineLoadIndex${i}`).valueAsNumber *
+    lineLoads[i].sizeLeft =
+      document.getElementById(`loadSizeLeftInputLineLoadIndex${i}`)
+        .valueAsNumber *
       document.getElementById(`loadScaleInputLineLoadIndex${i}`).valueAsNumber *
       1.5;
+    if (document.getElementById(`checkboxTrapezoidLineLoadIndex${i}`).checked) {
+      lineLoads[i].sizeRight =
+        document.getElementById(`loadSizeRightInputLineLoadIndex${i}`)
+          .valueAsNumber *
+        document.getElementById(`loadScaleInputLineLoadIndex${i}`)
+          .valueAsNumber *
+        1.5;
+    } else {
+      lineLoads[i].sizeRight = lineLoads[i].sizeLeft;
+    }
   }
   for (let i = 0; i < pointLoads.length; i++) {
     pointLoads[i].size =
@@ -840,39 +953,75 @@ function updateLineLoadLength() {
 function addLineLoadLabel() {
   for (let i = 0; i < lineLoads.length; i++) {
     numberOfDecimals = 1;
-    const loadInput = document.getElementById(`loadSizeInputLineLoadIndex${i}`)
-      .valueAsNumber;
-    if (isNaN(loadInput)) {
+    const loadInputLeft = document.getElementById(
+      `loadSizeLeftInputLineLoadIndex${i}`
+    ).valueAsNumber;
+    if (isNaN(loadInputLeft)) {
       continue;
     }
-    loadSizeDecimal = parseFloat(loadInput).toFixed(numOfDecimals);
-    loadSizeDecimal = loadSizeDecimal.replace(".", ",");
+    loadSizeLeftDecimal = parseFloat(loadInputLeft).toFixed(numOfDecimals);
+    loadSizeLeftDecimal = loadSizeLeftDecimal.replace(".", ",");
+
+    if (document.getElementById(`checkboxTrapezoidLineLoadIndex${i}`).checked) {
+      const loadInputRight = document.getElementById(
+        `loadSizeRightInputLineLoadIndex${i}`
+      ).valueAsNumber;
+      if (isNaN(loadInputRight)) {
+        continue;
+      }
+      loadSizeRightDecimal = parseFloat(loadInputRight).toFixed(numOfDecimals);
+      loadSizeRightDecimal = loadSizeRightDecimal.replace(".", ",");
+    }
     ctx.font = "14px Arial";
     ctx.fillStyle = lineLoads[i].color;
-    let x;
-    let y;
-    let alignment;
+    let x1;
+    let y1;
+    let x2;
+    let y2;
+    let alignment1;
+    let alignment2;
     const xOffset = 5;
     const yOffset = 10;
-    if (lineLoads[i].labelPos === "top_right") {
-      x = lineLoads[i].startX + lineLoads[i].length + xOffset;
-      y = lineLoads[i].startY - lineLoads[i].size + yOffset;
-      alignment = "left";
-    } else if (lineLoads[i].labelPos === "bottom_right") {
-      x = lineLoads[i].startX + lineLoads[i].length + xOffset;
-      y = lineLoads[i].startY - yOffset / 2;
-      alignment = "left";
-    } else if (lineLoads[i].labelPos === "top_left") {
-      x = lineLoads[i].startX - xOffset;
-      y = lineLoads[i].startY - lineLoads[i].size + yOffset;
-      alignment = "right";
-    } else if (lineLoads[i].labelPos === "bottom_left") {
-      x = lineLoads[i].startX - xOffset;
-      y = lineLoads[i].startY - yOffset / 2;
-      alignment = "right";
+    if (lineLoads[i].labelPos === "TOP_RIGHT") {
+      x1 = lineLoads[i].startX + lineLoads[i].length + xOffset;
+      y1 = lineLoads[i].startY - lineLoads[i].sizeRight + yOffset;
+      alignment1 = "left";
+    } else if (lineLoads[i].labelPos === "BOTTOM_RIGHT") {
+      x1 = lineLoads[i].startX + lineLoads[i].length + xOffset;
+      y1 = lineLoads[i].startY - yOffset / 2;
+      alignment1 = "left";
+    } else if (lineLoads[i].labelPos === "TOP_LEFT") {
+      x1 = lineLoads[i].startX - xOffset;
+      y1 = lineLoads[i].startY - lineLoads[i].sizeLeft + yOffset;
+      alignment1 = "right";
+    } else if (lineLoads[i].labelPos === "BOTTOM_LEFT") {
+      x1 = lineLoads[i].startX - xOffset;
+      y1 = lineLoads[i].startY - yOffset / 2;
+      alignment1 = "right";
+    } else if (lineLoads[i].labelPos === "TOP") {
+      x1 = lineLoads[i].startX + lineLoads[i].length + xOffset;
+      y1 = lineLoads[i].startY - lineLoads[i].sizeRight + yOffset;
+      alignment1 = "left";
+      x2 = lineLoads[i].startX - xOffset;
+      y2 = lineLoads[i].startY - lineLoads[i].sizeLeft + yOffset;
+      alignment2 = "right";
+    } else if (lineLoads[i].labelPos === "BOTTOM") {
+      x1 = lineLoads[i].startX + lineLoads[i].length + xOffset;
+      y1 = lineLoads[i].startY - yOffset / 2;
+      alignment1 = "left";
+      x2 = lineLoads[i].startX - xOffset;
+      y2 = lineLoads[i].startY - yOffset / 2;
+      alignment2 = "right";
     }
-    ctx.textAlign = alignment;
-    ctx.fillText(`${loadSizeDecimal} kN/m`, x, y);
+    if (lineLoads[i].labelPos === "TOP" || lineLoads[i].labelPos === "BOTTOM") {
+      ctx.textAlign = alignment1;
+      ctx.fillText(`${loadSizeRightDecimal} kN/m`, x1, y1);
+      ctx.textAlign = alignment2;
+      ctx.fillText(`${loadSizeLeftDecimal} kN/m`, x2, y2);
+    } else {
+      ctx.textAlign = alignment1;
+      ctx.fillText(`${loadSizeLeftDecimal} kN/m`, x1, y1);
+    }
   }
 }
 
@@ -959,7 +1108,7 @@ function addPointLoad() {
     Y: null,
     size: null,
     color: "black",
-    labelPos: "top_right",
+    labelPos: "TOP_RIGHT",
   };
 
   const mainDiv = document.createElement("div");
@@ -990,11 +1139,11 @@ function addPointLoad() {
 
   // adding input for size of load
 
-  const div1 = document.createElement("div");
+  const loadSizeDiv = document.createElement("div");
   const labelForLoadSizeInput = document.createElement("label");
   const loadSizeInput = document.createElement("input");
 
-  div1.classList.add("div1");
+  loadSizeDiv.classList.add("loadSizeDiv");
 
   loadSizeInput.id = `loadSizeInputPointLoadIndex${currentIndex}`;
   loadSizeInput.type = "number";
@@ -1018,11 +1167,11 @@ function addPointLoad() {
     }
   });
 
-  div1.appendChild(labelForLoadSizeInput);
-  div1.appendChild(loadSizeInput);
-  div1.insertAdjacentHTML("beforeend", "kN");
+  loadSizeDiv.appendChild(labelForLoadSizeInput);
+  loadSizeDiv.appendChild(loadSizeInput);
+  loadSizeDiv.insertAdjacentHTML("beforeend", "kN");
 
-  form.appendChild(div1);
+  form.appendChild(loadSizeDiv);
 
   const div2 = document.createElement("div");
   const pointLoadXInput = document.createElement("input");
@@ -1091,13 +1240,13 @@ function addPointLoad() {
   function changeLabelPosition() {
     let position;
     if (radio1.checked) {
-      position = "top_left";
+      position = "TOP_LEFT";
     } else if (radio2.checked) {
-      position = "bottom_left";
+      position = "BOTTOM_LEFT";
     } else if (radio3.checked) {
-      position = "top_right";
+      position = "TOP_RIGHT";
     } else if (radio4.checked) {
-      position = "bottom_right";
+      position = "BOTTOM_RIGHT";
     }
     pointLoadObject.labelPos = position;
 
@@ -1215,7 +1364,13 @@ function updatePointLoadY() {
             lineLoads[i].startX <= pointLoadObject.X &&
             pointLoadObject.X <= lineLoads[i].startX + lineLoads[i].length
           ) {
-            a.push(lineLoads[i].startY - lineLoads[i].size);
+            const x1 = lineLoads[i].startX;
+            const x2 = lineLoads[i].startX + lineLoads[i].length;
+            const y1 = lineLoads[i].sizeLeft;
+            const y2 = lineLoads[i].sizeRight;
+            const pointLoadX = pointLoadObject.X;
+            const lineLoadSize = y1 + ((y2 - y1) / (x2 - x1)) * (pointLoadX - x1);
+            a.push(lineLoads[i].startY - lineLoadSize);
           }
         }
         if (a.length !== 0) {
@@ -1278,19 +1433,19 @@ function addPointLoadLabel() {
     let alignment;
     const xOffset = 8;
     const yOffset = 10;
-    if (pointLoads[i].labelPos === "top_right") {
+    if (pointLoads[i].labelPos === "TOP_RIGHT") {
       x = loadX + xOffset;
       y = loadY - loadSize + yOffset;
       alignment = "left";
-    } else if (pointLoads[i].labelPos === "bottom_right") {
+    } else if (pointLoads[i].labelPos === "BOTTOM_RIGHT") {
       x = loadX + xOffset;
       y = loadY - yOffset / 2;
       alignment = "left";
-    } else if (pointLoads[i].labelPos === "top_left") {
+    } else if (pointLoads[i].labelPos === "TOP_LEFT") {
       x = loadX - xOffset;
       y = loadY - loadSize + yOffset;
       alignment = "right";
-    } else if (pointLoads[i].labelPos === "bottom_left") {
+    } else if (pointLoads[i].labelPos === "BOTTOM_LEFT") {
       x = loadX - xOffset;
       y = loadY - yOffset / 2;
       alignment = "right";
@@ -1328,24 +1483,23 @@ addPointLoadButton.addEventListener("click", addPointLoad);
 
 window.addEventListener("resize", resizeCanvas);
 
-clearButton.addEventListener("click", clearLoads);
-
-// Funktionen setSpanLenght kaldes, når tegn-knappen trykkes på. "Enter" gør det samme som knap-tryk
-$("#spanLengthId").keypress(function (event) {
-  if (event.keyCode === 13) {
-    $("#tegnBtn").click();
-  }
-});
-$("#tegnBtn").click(function () {
+const spanLengthInputHandler = event => {
   if (
-    isNaN(spanLengthInput.valueAsNumber) ||
-    spanLengthInput.valueAsNumber === 0
+    event.type === "change" ||
+    (event.type === "keydown" && event.key === "Enter")
   ) {
-    return;
+    if (
+      isNaN(spanLengthInput.valueAsNumber) ||
+      spanLengthInput.valueAsNumber === 0
+    ) {
+      return;
+    }
+    setSpanLength();
+    event.preventDefault();
   }
-  setSpanLength();
-  event.preventDefault();
-});
+};
+spanLengthInput.addEventListener("change", spanLengthInputHandler);
+spanLengthInput.addEventListener("keydown", spanLengthInputHandler);
 
 horizontalScaleInput.addEventListener("change", adjustHorizontalScale);
 
