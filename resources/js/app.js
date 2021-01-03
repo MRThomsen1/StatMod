@@ -856,8 +856,9 @@ function updateLineLoadStartY() {
     ) {
       lineLoads[j].startY = lineLoads[j - 1].startY;
     } else {
+      const previousMaxSize = Math.max(lineLoads[j - 1].sizeLeft, lineLoads[j - 1].sizeRight);
       lineLoads[j].startY =
-        lineLoads[j - 1].startY - lineLoads[j - 1].size - 10;
+      lineLoads[j - 1].startY - previousMaxSize - 10;
     }
   }
   updateLoadDrawings();

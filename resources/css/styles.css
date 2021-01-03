@@ -482,6 +482,11 @@ grid-row-start: 2;
 grid-row-start: 3;
 }
 
+.colorpickerDiv {
+  display: flex;
+  align-items: center;
+}
+
 .hidden {
   display: none
   }
