@@ -85,7 +85,7 @@ p {
 }
 
 .loadInput {
-  width: 30px;
+  width: 50px;
   margin-right: 4px;
 }
 
@@ -319,6 +319,18 @@ margin-left: 5px;
 
 .pointLoadDiv .settingsModal {
   width: 9rem;
+}
+
+.pointLoadDiv .div1 {
+  padding-bottom: 3px;
+}
+.pointLoadDiv .div2 {
+  padding-bottom: 5px;
+}
+
+.pointLoadDiv .numInput {
+  /* margin-left: 5px; */
+  margin-right: 4px;
 }
 
 .loadDiv .settingsModal p {

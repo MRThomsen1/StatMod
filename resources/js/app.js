@@ -431,7 +431,7 @@ function addLineLoad() {
   loadSizeInput.classList.add("noSpinners");
 
   labelForLoadSizeInput.htmlFor = `loadSizeInputLineLoadIndex${currentIndex}`;
-  labelForLoadSizeInput.textContent = "Størrelse: ";
+  labelForLoadSizeInput.textContent = "Størrelse:";
 
   loadSizeInput.addEventListener("change", updateLoadSizes);
 
@@ -495,7 +495,7 @@ function addLineLoad() {
   });
 
   labelForNumInput2.htmlFor = `numInput2ForLineLoadIndex${currentIndex}`;
-  labelForNumInput2.textContent = "Start: ";
+  labelForNumInput2.textContent = "Start:";
 
   numInput3.id = `numInput3ForLineLoadIndex${currentIndex}`;
   numInput3.type = "number";
@@ -514,7 +514,7 @@ function addLineLoad() {
   });
 
   labelForNumInput3.htmlFor = `numInput3ForLineLoadIndex${currentIndex}`;
-  labelForNumInput3.textContent = "Udbredelse: ";
+  labelForNumInput3.textContent = "Udbredelse:";
 
   subDiv1.appendChild(labelForNumInput2);
   subDiv1.appendChild(numInput2);
@@ -707,6 +707,8 @@ function addLineLoad() {
 
 function updateLoadDrawings() {
   clearLoads();
+  updatePointLoadX();
+  updatePointLoadY();
   for (let i = 0; i < lineLoads.length; i++) {
     if (
       isNaN(
@@ -739,8 +741,8 @@ function updateLoadDrawings() {
       pointLoads[j].color
     );
   }
-
   addLineLoadLabel();
+  addPointLoadLabel();
 }
 
 function updateLineLoadStartY() {
@@ -769,11 +771,11 @@ function updateLoadSizes() {
   for (let i = 0; i < pointLoads.length; i++) {
     pointLoads[i].size =
       document.getElementById(`loadSizeInputPointLoadIndex${i}`).valueAsNumber *
-      document.getElementById(`loadScaleInputPointLoadIndex${i}`).valueAsNumber *
+      document.getElementById(`loadScaleInputPointLoadIndex${i}`)
+        .valueAsNumber *
       1.5;
   }
   updateLineLoadStartY();
-  updatePointLoadY();
   updateLoadDrawings();
 }
 
@@ -887,12 +889,12 @@ function reduceIndexInLoads(type, deletedIndex) {
   let pointLoadIds;
   let pointLoadLabels;
   if (type === "LINELOAD") {
-  lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
-  lineLoadLabels = document.querySelectorAll(".lineLoadDiv label");
-} else if (type === "POINTLOAD") {
-  pointLoadIds = document.querySelectorAll("[id*='ointLoadIndex']");
-  pointLoadLabels = document.querySelectorAll(".pointLoadDiv label");
-}
+    lineLoadIds = document.querySelectorAll("[id*='ineLoadIndex']");
+    lineLoadLabels = document.querySelectorAll(".lineLoadDiv label");
+  } else if (type === "POINTLOAD") {
+    pointLoadIds = document.querySelectorAll("[id*='ointLoadIndex']");
+    pointLoadLabels = document.querySelectorAll(".pointLoadDiv label");
+  }
   const startingIndex = deletedIndex + 1;
   let searchedIds;
   if (type === "LINELOAD") {
@@ -957,44 +959,43 @@ function addPointLoad() {
     Y: null,
     size: null,
     color: "black",
-    labelPos: "top_right"
+    labelPos: "top_right",
   };
 
   const mainDiv = document.createElement("div");
   const h5 = document.createElement("h5");
   const form = document.createElement("form");
 
-  
   mainDiv.id = `pointLoadIndex${currentIndex}`;
   mainDiv.classList.add("loadDiv");
   mainDiv.classList.add("pointLoadDiv");
-  
+
   h5.textContent = `Punktlast #${currentIndex + 1}`;
-  
+
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
-  
+
   settingsIcon.src = "./resources/data/images/settingsicon.png";
   settingsIcon.classList.add("settingsIcon");
-  
+
   settingsIconContainer.classList.add("settingsIconContainer");
-  
+
   function toggleSettingsModal() {
     settingsModal.classList.toggle("pseudoHidden");
   }
-  
+
   settingsIcon.addEventListener("click", toggleSettingsModal);
-  
+
   settingsIconContainer.appendChild(settingsIcon);
-  
+
   // adding input for size of load
-  
+
   const div1 = document.createElement("div");
   const labelForLoadSizeInput = document.createElement("label");
   const loadSizeInput = document.createElement("input");
-  
+
   div1.classList.add("div1");
-  
+
   loadSizeInput.id = `loadSizeInputPointLoadIndex${currentIndex}`;
   loadSizeInput.type = "number";
   loadSizeInput.step = "any";
@@ -1002,19 +1003,53 @@ function addPointLoad() {
   loadSizeInput.classList.add("numInput");
   loadSizeInput.classList.add("loadInput");
   loadSizeInput.classList.add("noSpinners");
-  
+
   labelForLoadSizeInput.htmlFor = loadSizeInput;
-  labelForLoadSizeInput.textContent = "Størrelse: ";
-  
-  loadSizeInput.addEventListener("change", updateLoadSizes);
-  
+  labelForLoadSizeInput.textContent = "Størrelse:";
+
+  loadSizeInput.addEventListener("change", function () {
+    updateLoadSizes();
+  });
+
+  loadSizeInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      updateLoadSizes();
+      event.preventDefault();
+    }
+  });
+
   div1.appendChild(labelForLoadSizeInput);
   div1.appendChild(loadSizeInput);
   div1.insertAdjacentHTML("beforeend", "kN");
-  
+
   form.appendChild(div1);
 
-// ------------ Settings modal ----------
+  const div2 = document.createElement("div");
+  const pointLoadXInput = document.createElement("input");
+  const labelforPointLoadXInput = document.createElement("label");
+
+  div2.classList.add("div2");
+
+  pointLoadXInput.classList.add("numInput");
+  pointLoadXInput.classList.add("spanInput");
+  pointLoadXInput.classList.add("noSpinners");
+
+  pointLoadXInput.id = `pointLoadXInputPointLoadIndex${currentIndex}`;
+  pointLoadXInput.type = "number";
+  pointLoadXInput.step = "any";
+
+  labelforPointLoadXInput.htmlFor = pointLoadXInput;
+  labelforPointLoadXInput.textContent = "Placering fra venstre:";
+
+  pointLoadXInput.addEventListener("change", updateLoadDrawings);
+
+  div2.appendChild(labelforPointLoadXInput);
+  div2.appendChild(pointLoadXInput);
+  div2.insertAdjacentHTML("beforeend", "m");
+
+  form.appendChild(div2);
+
+  // ------------ Settings modal ----------
 
   const settingsModal = document.createElement("div");
   const labelPlacementText = document.createElement("p");
@@ -1068,7 +1103,7 @@ function addPointLoad() {
 
     updateLoadDrawings();
   }
-  
+
   exitIcon.addEventListener("click", toggleSettingsModal);
 
   settingsIconContainer.appendChild(settingsModal);
@@ -1154,14 +1189,14 @@ function addPointLoad() {
     updatePointLoadY();
     updateLoadSizes();
   });
-  
+
   mainDiv.appendChild(h5);
   mainDiv.appendChild(deleteLoadBtn);
   mainDiv.appendChild(settingsIconContainer);
   mainDiv.appendChild(form);
-  
+
   pointLoadDiv.appendChild(mainDiv);
-  
+
   pointLoads.push(pointLoadObject);
   updatePointLoadY();
 }
@@ -1170,22 +1205,22 @@ function updatePointLoadY() {
   if (pointLoads.length === 0) {
     return;
   } else {
-    let currentIndex = -1
+    let currentIndex = -1;
     for (const pointLoadObject of pointLoads) {
-      currentIndex++
+      currentIndex++;
       if (lineLoads.length !== 0) {
         let a = [];
         for (let i = lineLoads.length - 1; i >= 0; i--) {
           if (
             lineLoads[i].startX <= pointLoadObject.X &&
             pointLoadObject.X <= lineLoads[i].startX + lineLoads[i].length
-            ) {
-              a.push(lineLoads[i].startY - lineLoads[i].size);
-            }
+          ) {
+            a.push(lineLoads[i].startY - lineLoads[i].size);
           }
-          if (a.length !== 0) {
-            pointLoadObject.Y = Math.min(...a) - 10;
-          } else {
+        }
+        if (a.length !== 0) {
+          pointLoadObject.Y = Math.min(...a) - 10;
+        } else {
           pointLoadObject.Y = lineCoorY - 15;
         }
       } else {
@@ -1196,10 +1231,10 @@ function updatePointLoadY() {
       if (pointLoads.length !== 0) {
         for (let i = 0; i < pointLoads.length; i++) {
           if (i < currentIndex) {
-          b =
-            pointLoads[i].X === pointLoadObject.X
-              ? b + pointLoads[i].size + 10
-              : b;
+            b =
+              pointLoads[i].X === pointLoadObject.X
+                ? b + pointLoads[i].size + 10
+                : b;
           }
         }
       }
@@ -1207,6 +1242,64 @@ function updatePointLoadY() {
     }
   }
 }
+
+function updatePointLoadX() {
+  if (pointLoads.length === 0) {
+    return;
+  } else {
+    for (let i = 0; i < pointLoads.length; i++) {
+      const xInput = document.getElementById(
+        `pointLoadXInputPointLoadIndex${i}`
+      ).valueAsNumber;
+      pointLoads[i].X = isNaN(xInput)
+        ? lineCoorLeftX
+        : lineCoorLeftX + xInput * scale;
+    }
+  }
+}
+
+function addPointLoadLabel() {
+  for (let i = 0; i < pointLoads.length; i++) {
+    numberOfDecimals = 1;
+    const loadInput = document.getElementById(`loadSizeInputPointLoadIndex${i}`)
+      .valueAsNumber;
+    if (isNaN(loadInput)) {
+      continue;
+    }
+    loadSizeDecimal = parseFloat(loadInput).toFixed(numOfDecimals);
+    loadSizeDecimal = loadSizeDecimal.replace(".", ",");
+    ctx.font = "14px Arial";
+    ctx.fillStyle = pointLoads[i].color;
+    loadX = pointLoads[i].X;
+    loadY = pointLoads[i].Y;
+    loadSize = pointLoads[i].size;
+    let x;
+    let y;
+    let alignment;
+    const xOffset = 8;
+    const yOffset = 10;
+    if (pointLoads[i].labelPos === "top_right") {
+      x = loadX + xOffset;
+      y = loadY - loadSize + yOffset;
+      alignment = "left";
+    } else if (pointLoads[i].labelPos === "bottom_right") {
+      x = loadX + xOffset;
+      y = loadY - yOffset / 2;
+      alignment = "left";
+    } else if (pointLoads[i].labelPos === "top_left") {
+      x = loadX - xOffset;
+      y = loadY - loadSize + yOffset;
+      alignment = "right";
+    } else if (pointLoads[i].labelPos === "bottom_left") {
+      x = loadX - xOffset;
+      y = loadY - yOffset / 2;
+      alignment = "right";
+    }
+    ctx.textAlign = alignment;
+    ctx.fillText(`${loadSizeDecimal} kN`, x, y);
+  }
+}
+
 // function changeDecimals(id, value)
 
 // ---------------------------- END OF FUNCTIONS ---------------------------------
@@ -1337,14 +1430,15 @@ document
     updateLoadSizes();
   });
 
- document
+document
   .getElementById("allPointLoadsScaleInput")
   .addEventListener("change", function () {
     const lineloadScaleInputs = document.querySelectorAll(
       "[id*='loadScaleInputPointLoadIndex']"
     );
-    const allPointLoadsScale = document.getElementById("allPointLoadsScaleInput")
-      .valueAsNumber;
+    const allPointLoadsScale = document.getElementById(
+      "allPointLoadsScaleInput"
+    ).valueAsNumber;
     for (const scaleInput of pointloadScaleInputs) {
       scaleInput.value = allPointLoadsScale;
     }
