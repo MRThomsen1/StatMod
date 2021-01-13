@@ -77,8 +77,7 @@ function setSpanLength() {
   console.log(scale);
   drawModel();
   fullLoadCheckboxChangeHandler();
-  updateLineLoadStart();
-  updateLineLoadLengthPlaceholder();
+  updateLoadDrawings();
 }
 
 function setLineCoordinates(scale) {
@@ -360,9 +359,6 @@ function isOdd(x) {
   }
 }
 
-function makeArray(arrayLikeObject) {
-  return Array.prototype.slice.call(arrayLikeObject);
-}
 
 function addLineLoad() {
   let currentIndex = lineLoads.length;
@@ -807,6 +803,8 @@ function addLineLoad() {
 
 function updateLoadDrawings() {
   drawModel();
+  updateLineLoadStart();
+  updateLineLoadLength();
   updatePointLoadX();
   updatePointLoadY();
   for (let i = 0; i < lineLoads.length; i++) {
@@ -934,7 +932,6 @@ function updateLineLoadStart() {
       }
     }
   }
-  updateLoadDrawings();
 }
 
 function updateLineLoadLength() {
@@ -942,12 +939,12 @@ function updateLineLoadLength() {
     if (document.getElementById(`checkbox1ForLineLoadIndex${i}`).checked) {
       continue;
     } else {
-      lineLoads[i].length =
-        document.getElementById(`numInput3ForLineLoadIndex${i}`).valueAsNumber *
-        scale;
+      let newLength = document.getElementById(`numInput3ForLineLoadIndex${i}`).valueAsNumber;
+      if (isNaN(newLength)) {continue} else {
+       lineLoads[i].length = newLength * scale;
+      }
     }
   }
-  updateLoadDrawings();
   updateLineLoadLengthPlaceholder();
 }
 
@@ -1029,7 +1026,6 @@ function addLineLoadLabel() {
 function adjustHorizontalScale() {
   scale = horizontalScaleInput.valueAsNumber * INITIALSCALE;
   setSpanLength();
-  updateLineLoadLength();
   updateLoadDrawings();
 }
 
@@ -1537,6 +1533,7 @@ document
   .addEventListener("change", function () {
     document.getElementById("spanScaleSettings").classList.toggle("hidden");
     setSpanLength();
+    updateLoadDrawings();
   });
 
 document
@@ -1588,7 +1585,7 @@ document
 document
   .getElementById("allPointLoadsScaleInput")
   .addEventListener("change", function () {
-    const lineloadScaleInputs = document.querySelectorAll(
+    const pointloadScaleInputs = document.querySelectorAll(
       "[id*='loadScaleInputPointLoadIndex']"
     );
     const allPointLoadsScale = document.getElementById(
