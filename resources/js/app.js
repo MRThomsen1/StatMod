@@ -16,7 +16,7 @@ const MINIMUMLINELENGTH = 80;
 let scale = INITIALSCALE;
 let spanLength = 1.0;
 let spanLengthDecimal;
-let numOfDecimals = 1;
+let numOfDecimals = 2;
 
 let lineLength = setLineCoordinates(scale);
 
@@ -950,7 +950,7 @@ function updateLineLoadLength() {
 
 function addLineLoadLabel() {
   for (let i = 0; i < lineLoads.length; i++) {
-    numberOfDecimals = 1;
+    numberOfDecimals = 2;
     const loadInputLeft = document.getElementById(
       `loadSizeLeftInputLineLoadIndex${i}`
     ).valueAsNumber;
@@ -1412,7 +1412,7 @@ function updatePointLoadX() {
 
 function addPointLoadLabel() {
   for (let i = 0; i < pointLoads.length; i++) {
-    numberOfDecimals = 1;
+    numberOfDecimals = 2;
     const loadInput = document.getElementById(`loadSizeInputPointLoadIndex${i}`)
       .valueAsNumber;
     if (isNaN(loadInput)) {
