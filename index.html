@@ -22,23 +22,23 @@
 
   <body>
    <div>
-    <h1>StatMod - Nem modellering af statiske modeller</h1>
+    <h1 class="headline">StatMod - Nem modellering af statiske modeller</h1>
+    <h3 class="subheadline">Simpelt understøttet bjælke</h3>
     <aside class="sidebar">
-    <h2>Simpelt understøttet bjælke</h2>
-    <div id="spanLengthInputDiv">
-      <p>
-      <label for="spanLengthId">Spændvidde:</label>
+      <div class="span-length-header-container header-container">
+      <h5>Spændvidde:</h5>
+      </div>
+      <div id="spanLengthInputDiv">
         <input
         type="number";
         class="numInput spanInput noSpinners"
         id="spanLengthId";
-        placeholder="1,0";
+        placeholder="1,00";
         step="any"
         >
         m
         <button type="button" class="btn1" id="tegnBtn">Opdater</button>
-      </p>
-        <div class="settingsIconContainer">
+          <div class="settingsIconContainer">
           <img id="spanSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
           <div id="spanSettingsModal" class="settingsModal pseudoHidden" >
             <label for="manualScaleCheckbox">Indstil horisontal skala manuelt</label>
@@ -52,18 +52,16 @@
               <div class="exitIconContainer">
                 <img id="spanSettingsExitIcon" src="./resources/data/images/crossiconblack.png" alt="X">
             </div>
-            <div>
-              <h6>
-                Antal decimaler
-              </h6>
-              <input type="number" name="decimalsSpan" id="decimalsSpanInput">
+            <div class="decimal-spinner-container">
+              <p>Antal decimaler:</p>
+              <input type="number" name="decimalsSpan" id="decimalsSpanInput" class="decimalSpinner" min="1" max="5" value="2">
             </div>
           </div>
         </div>
     </div>
     
     <div id="loadsDiv">
-      <h3>Laster</h3>
+      <div class="line-load-header-container header-container">
       <h5>Linjelaster</h5>
       <div class="settingsIconContainer mainSettingsIconContainer">
         <img id="lineLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
@@ -75,9 +73,10 @@
           </div>
         </div>
       </div>
-      <br>
+    </div>
       <input type="button" class="btn1" value="Tilføj jævnt fordelt linjelast" id="addLineLoadBtn">
       <div id="lineLoadDiv"></div>
+      <div class="point-load-header-container header-container">
       <h5>Punktlaster</h5>
         <div class="settingsIconContainer mainSettingsIconContainer">
           <img id="pointLoadsSettingsIcon" src="./resources/data/images/settingsicon.png" alt="Settings" class="settingsIcon">
@@ -89,7 +88,7 @@
             </div>
           </div>
         </div>
-        <br>
+      </div>
       <input type="button" class="btn1" value="Tilføj punktlast" id="addPointLoadBtn">
       <div id="pointLoadDiv"></div>
     </div>

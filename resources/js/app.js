@@ -359,7 +359,6 @@ function isOdd(x) {
   }
 }
 
-
 function addLineLoad() {
   let currentIndex = lineLoads.length;
   const lineLoadObject = {
@@ -382,14 +381,17 @@ function addLineLoad() {
       10;
   }
   const mainDiv = document.createElement("div");
-  const h5 = document.createElement("h5");
-  const form = document.createElement("form");
+  const headerContainer = document.createElement("div");
+  const h6 = document.createElement("h6");
 
   mainDiv.id = `lineLoadIndex${currentIndex}`;
   mainDiv.classList.add("loadDiv");
   mainDiv.classList.add("lineLoadDiv");
 
-  h5.textContent = `Linjelast #${currentIndex + 1}`;
+  h6.textContent = `Linjelast #${currentIndex + 1}`;
+
+  headerContainer.classList.add("header-container");
+  headerContainer.classList.add("single-line-load-header-container");
 
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
@@ -474,8 +476,6 @@ function addLineLoad() {
   loadSizeRightDiv.insertAdjacentHTML("beforeend", "kN/m");
 
   loadSizeDiv.appendChild(loadSizeRightDiv);
-
-  form.appendChild(loadSizeDiv);
 
   checkboxTrapezoidLoad.addEventListener("change", function () {
     loadSizeRightDiv.classList.toggle("hidden");
@@ -583,9 +583,6 @@ function addLineLoad() {
   div2.appendChild(subDiv1);
   div2.appendChild(subDiv2);
 
-  form.appendChild(labelForCheckbox1);
-  form.appendChild(checkbox1);
-  form.appendChild(div2);
   // start and length inputs of load added
 
   const settingsModal = document.createElement("div");
@@ -632,7 +629,9 @@ function addLineLoad() {
       const position = "TOP";
       lineLoadObject.labelPos = position;
       updateLoadDrawings();
-    } else {changeLabelPosition();}
+    } else {
+      changeLabelPosition();
+    }
   }
   function changeLabelPositionBottom() {
     if (checkboxTrapezoidLoad.checked) {
@@ -641,7 +640,9 @@ function addLineLoad() {
       const position = "BOTTOM";
       lineLoadObject.labelPos = position;
       updateLoadDrawings();
-    } else {changeLabelPosition();}
+    } else {
+      changeLabelPosition();
+    }
   }
 
   function changeLabelPosition() {
@@ -655,7 +656,7 @@ function addLineLoad() {
     } else if (radio4.checked) {
       position = "BOTTOM_RIGHT";
     }
-  
+
     lineLoadObject.labelPos = position;
     updateLoadDrawings();
   }
@@ -677,7 +678,6 @@ function addLineLoad() {
       radio3.checked = true;
       changeLabelPositionTop();
     }
-    
   }
 
   exitIcon.addEventListener("click", toggleSettingsModal);
@@ -790,18 +790,21 @@ function addLineLoad() {
     updateLoadSizes();
   });
 
-  mainDiv.appendChild(h5);
-  mainDiv.appendChild(deleteLoadBtn);
-  mainDiv.appendChild(settingsIconContainer);
-  mainDiv.appendChild(form);
+  headerContainer.appendChild(h6);
+  headerContainer.appendChild(deleteLoadBtn);
+  headerContainer.appendChild(settingsIconContainer);
+
+  mainDiv.appendChild(headerContainer);
+  mainDiv.appendChild(loadSizeDiv);
+  mainDiv.appendChild(labelForCheckbox1);
+  mainDiv.appendChild(checkbox1);
+  mainDiv.appendChild(div2);
 
   lineLoadDiv.appendChild(mainDiv);
 
   lineLoads.push(lineLoadObject);
   console.log(lineLoads);
 }
-
-
 
 function updateLineLoadStartY() {
   for (let j = 0; j < lineLoads.length; j++) {
@@ -812,9 +815,11 @@ function updateLineLoadStartY() {
     ) {
       lineLoads[j].startY = lineLoads[j - 1].startY;
     } else {
-      const previousMaxSize = Math.max(lineLoads[j - 1].sizeLeft, lineLoads[j - 1].sizeRight);
-      lineLoads[j].startY =
-      lineLoads[j - 1].startY - previousMaxSize - 10;
+      const previousMaxSize = Math.max(
+        lineLoads[j - 1].sizeLeft,
+        lineLoads[j - 1].sizeRight
+      );
+      lineLoads[j].startY = lineLoads[j - 1].startY - previousMaxSize - 10;
     }
   }
   updateLoadDrawings();
@@ -897,9 +902,12 @@ function updateLineLoadLength() {
     if (document.getElementById(`checkbox1ForLineLoadIndex${i}`).checked) {
       continue;
     } else {
-      let newLength = document.getElementById(`numInput3ForLineLoadIndex${i}`).valueAsNumber;
-      if (isNaN(newLength)) {continue} else {
-       lineLoads[i].length = newLength * scale;
+      let newLength = document.getElementById(`numInput3ForLineLoadIndex${i}`)
+        .valueAsNumber;
+      if (isNaN(newLength)) {
+        continue;
+      } else {
+        lineLoads[i].length = newLength * scale;
       }
     }
   }
@@ -1067,14 +1075,17 @@ function addPointLoad() {
   };
 
   const mainDiv = document.createElement("div");
-  const h5 = document.createElement("h5");
-  const form = document.createElement("form");
+  const h6 = document.createElement("h6");
+  const headerContainer = document.createElement("div");
 
   mainDiv.id = `pointLoadIndex${currentIndex}`;
   mainDiv.classList.add("loadDiv");
   mainDiv.classList.add("pointLoadDiv");
 
-  h5.textContent = `Punktlast #${currentIndex + 1}`;
+  h6.textContent = `Punktlast #${currentIndex + 1}`;
+
+  headerContainer.classList.add("header-container");
+  headerContainer.classList.add("single-point-load-header-container");
 
   const settingsIconContainer = document.createElement("div");
   const settingsIcon = document.createElement("img");
@@ -1126,8 +1137,6 @@ function addPointLoad() {
   loadSizeDiv.appendChild(loadSizeInput);
   loadSizeDiv.insertAdjacentHTML("beforeend", "kN");
 
-  form.appendChild(loadSizeDiv);
-
   const div2 = document.createElement("div");
   const pointLoadXInput = document.createElement("input");
   const labelforPointLoadXInput = document.createElement("label");
@@ -1150,8 +1159,6 @@ function addPointLoad() {
   div2.appendChild(labelforPointLoadXInput);
   div2.appendChild(pointLoadXInput);
   div2.insertAdjacentHTML("beforeend", "m");
-
-  form.appendChild(div2);
 
   // ------------ Settings modal ----------
 
@@ -1294,10 +1301,13 @@ function addPointLoad() {
     updateLoadSizes();
   });
 
-  mainDiv.appendChild(h5);
-  mainDiv.appendChild(deleteLoadBtn);
-  mainDiv.appendChild(settingsIconContainer);
-  mainDiv.appendChild(form);
+  headerContainer.appendChild(h6);
+  headerContainer.appendChild(deleteLoadBtn);
+  headerContainer.appendChild(settingsIconContainer);
+
+  mainDiv.appendChild(headerContainer);
+  mainDiv.appendChild(loadSizeDiv);
+  mainDiv.appendChild(div2);
 
   pointLoadDiv.appendChild(mainDiv);
 
@@ -1324,7 +1334,8 @@ function updatePointLoadY() {
             const y1 = lineLoads[i].sizeLeft;
             const y2 = lineLoads[i].sizeRight;
             const pointLoadX = pointLoadObject.X;
-            const lineLoadSize = y1 + ((y2 - y1) / (x2 - x1)) * (pointLoadX - x1);
+            const lineLoadSize =
+              y1 + ((y2 - y1) / (x2 - x1)) * (pointLoadX - x1);
             a.push(lineLoads[i].startY - lineLoadSize);
           }
         }
@@ -1410,6 +1421,13 @@ function addPointLoadLabel() {
   }
 }
 
+function adjustNumberOfSpanDecimals() {
+  const chosenValue = document.getElementById("decimalsSpanInput").value;
+  numOfDecimals = chosenValue;
+  labelSpan();
+  updateLoadDrawings();
+}
+
 // --------------- Update Load Drawings Function -----------------------
 
 function updateLoadDrawings() {
@@ -1455,7 +1473,6 @@ function updateLoadDrawings() {
   addLineLoadLabel();
   addPointLoadLabel();
 }
-
 
 // function changeDecimals(id, value)
 
@@ -1540,6 +1557,10 @@ document
     setSpanLength();
     updateLoadDrawings();
   });
+
+document
+  .getElementById("decimalsSpanInput")
+  .addEventListener("change", adjustNumberOfSpanDecimals);
 
 document
   .getElementById("lineLoadsSettingsIcon")

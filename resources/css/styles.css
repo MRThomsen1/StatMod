@@ -25,11 +25,11 @@ body {
   /* background-color: #5d9fbdbe;  */
   background-image:  url("../data/images/wallpaper/wallpaper\ \(4\).jpg");
   /* background-color: #8a8a8a; */
-  margin-left: 20px;
+  margin-left: 2rem;
 }
 
 .sidebar {
-  max-width: 270px;
+  max-width: 27rem;
 }
 
 h1 {
@@ -60,13 +60,29 @@ p {
   font-size: 1.2rem;
 }
 
+.headline {
+  margin-top: 1rem;
+}
+.sidebar {
+  margin-top: .8rem;
+}
+
+.span-length-header-container {
+margin-bottom: .8rem;
+}
+
+.laster-headline {
+  margin-top: .5rem;
+}
+
+
 .btn1 {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   background-color: rgba(190, 190, 190, 0.356);
   /* background-color: rgba(190, 190, 190, 0.596); */
   border: none;
-  border-radius: 5px;
-  padding: 2px 5px;
+  border-radius: .5rem;
+  padding: .2rem .5rem;
   cursor: pointer;
   outline: none;
   transition: 0.2s all;
@@ -100,12 +116,12 @@ p {
 }
 
 .spanInput {
-  width: 40px;
+  width: 4rem;
 }
 
 .loadInput {
-  width: 50px;
-  margin-right: 4px;
+  width: 5rem;
+  margin-right: .4rem;
 }
 
 .noSpinners{
@@ -117,24 +133,19 @@ p {
   margin: 0;
 }
 
-.decimalSpinner {
-  width: 25px;
-  text-align: left;
-}
-
 .spinnerOpacity1::-webkit-inner-spin-button, 
 .spinnerOpacity1::-webkit-outer-spin-button {  
   opacity: 1;
 }
 
 .scaleSpinner {
-  width: 36px;
+  width: 3.6rem;
   text-align: right;
 }
 
 .colorPicker {
-  height: 15px;
-  width: 15px;
+  height: 1.5rem;
+  width: 1.5rem;
   opacity: 0;
   display: block;
   border: none;
@@ -143,22 +154,22 @@ p {
 
 .colorPickerWrapper{
   display: inline-block;
-  height: 15px;
-  width: 15px;
-  margin-bottom: 5px;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-bottom: .5rem;
   border: 1px, solid; 
-  border-radius: 5px;
+  border-radius: .5rem;
 }
 
 label[for*="heckbox"] {
-  padding-left: 5px;
-  font-size: 12px;
+  padding-left: .5rem;
+  font-size: 1.2rem;
 }
 
 .clearBackground {
   position: absolute;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   height: 100vh;
   width: 100vw;
   background: rgba(0, 0, 0, 0.205);
@@ -166,26 +177,29 @@ label[for*="heckbox"] {
 }
 
 #spanLengthInputDiv {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   position: relative;
-  max-width: 270px;
+  max-width: 27rem;
+  font-size: 1.2rem;
 }
 
 .settingsIconContainer {
   display: block;
-  position: absolute;
+  position: relative;
   background: #ffffff2a;
-  border-radius: 20px;
-  width: 20px;
-  height: 20px;
+  border-radius: 2rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .settingsIcon {
   display: block;
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 1rem;
   cursor: pointer;
   transition: 0.2s all;
 }
@@ -200,44 +214,37 @@ label[for*="heckbox"] {
   /* background-color: #87b7ce; */
   color:#000000;
   position: absolute;
-  left: 23px;
-  top: 0px;
+  left: 2.3rem;
+  top: 0;
   z-index: 9;
   border: 1px solid black;
-  border-radius: 6px;
+  border-radius: 0.6rem;
   transition-property: opacity, visibility;
   transition-duration: 0.3s, 0s;
   transition-delay: 0s;  
 }
 
 .mainSettingsModal {
-  width: 19rem;
+  width: 30rem;
 }
 
 .mainSettingsModal label {
-  padding-left: 5px;
-  font-size: 12px;
+  padding-left: .5rem;
+  font-size: 1.2rem;
 }
-
-#spanLengthInputDiv .settingsIconContainer {
-  top: 1px;
-  right: 10px;
-}
-
 
 #spanSettingsModal {
-  width: 18rem;
+  width: 24rem;
 }
 
 #manualScaleCheckbox {
   position: relative;
-  top: 2px;
+  top: .2rem;
 }
 
 .settingsModal p {
-  font-size: 12px;
-  padding-left: 5px;
-  margin-left: 0px;
+  font-size: 1.2rem;
+  padding-left: 0.5rem;
 }
 
 .settingsModal .numInput {
@@ -246,10 +253,10 @@ label[for*="heckbox"] {
 
 .settingsModal .scaleInput {
   width: 15%;
-  margin-left: 5px;
-  margin-top: 2px;
-  margin-bottom: 5px;
-  border-radius: 3px;
+  margin-left: 0.5rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.3rem;
   border: 1px solid;
   text-align: right;
   float: left;
@@ -278,15 +285,24 @@ label[for*="heckbox"] {
   opacity: 1; /* Fully shown on mouse-over */
 }
 
+#spanSettingsModal .decimal-spinner-container {
+  display: flex;
+  align-items: flex-end;
+  gap: .8rem
+}
+
+.decimalSpinner {
+  width: 3rem;
+  text-align: left;
+}
+
 #loadsDiv h4 {
   display: inline-block;
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
 }
 
 .mainSettingsIconContainer {
 display: inline-block;
-margin-top: 5px;
-margin-left: 5px;
 }
 
 .loadDiv {
@@ -295,23 +311,26 @@ margin-left: 5px;
   background: #03030327;
   /* background: #5d9fbdd5; */
   /* background: #727272; */
-  border-radius: 10px;
-  padding-left: 0px;
-  padding-right: 5px;
-  margin: 5px auto 2.5px;
-  font-size: 14px;
+  border-radius: 1rem;
+  padding-right: 0.5rem;
+  margin: 0.5rem auto .25rem;
+  font-size: 1.4rem;
 }
 
-.loadDiv h5 {
-  padding-top: 5px;
-  margin: 0px 0px 5px 5px;
+.loadDiv .header-container {
+  padding-left: .5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem
 }
 
-.deleteLoadButton {
-  position: absolute;
-  font-size: 11px;
-  top: 5px;
-  right: 13%;
+.loadDiv .header-container h6{
+  display: block;
+  margin-right: auto;
+}
+
+.loadDiv .deleteLoadButton {
+  font-size: 1.1rem;
 }
 
 .loadDiv label {
@@ -348,20 +367,26 @@ margin-left: 0px;
 margin-left: 15px;
 }
 
-.loadDiv .settingsIconContainer {
-  top: 5px;
-  right: 10px;
-}
 
 .lineLoadDiv .settingsModal {
   left: 35px;
   top: -5px;
-  width: 18rem;
+  width: 28rem;
   height: auto;
 }
 
+.header-container {
+  margin: .8rem 0;
+}
+
+.point-load-header-container,
+.line-load-header-container {
+  display: flex;
+}
+
+
 .pointLoadDiv .settingsModal {
-  width: 9rem;
+  width: 14rem;
 }
 
 .pointLoadDiv .div1 {
@@ -384,6 +409,7 @@ margin-left: 15px;
 .loadDiv .settingsModal label {
 font-size: 12px;
 }
+
 .sameLineSettings {
   padding-top: 0px;
   margin-right: 2px;
@@ -425,7 +451,7 @@ top: 0px;
   /* background-color: rgb(163, 163, 163); */
   margin-left: 10px;
   z-index: 10;
-  grid-template-columns: 1rem 232px 1rem;
+  grid-template-columns: 1rem 15rem 1rem;
   grid-template-rows: 0.5rem 1rem 0.5rem 1rem 2rem;
   justify-items: center;
   align-items: center;
