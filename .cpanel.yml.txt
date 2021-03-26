@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/mortenthom/StatMod.mortenthomsen.dk/
+    - /bin/cp index.htlm $DEPLOYPATH
+    - /bin/cp -R resources $DEPLOYPATH
