@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/mortenthom/public_html/
+    - export DEPLOYPATH=/home/mortenthom/StatMod.mortenthomsen.dk/
     - /bin/cp index.html $DEPLOYPATH
     - /bin/cp -R resources $DEPLOYPATH
