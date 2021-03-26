@@ -801,49 +801,7 @@ function addLineLoad() {
   console.log(lineLoads);
 }
 
-function updateLoadDrawings() {
-  drawModel();
-  updateLineLoadStart();
-  updateLineLoadLength();
-  updatePointLoadX();
-  updatePointLoadY();
-  for (let i = 0; i < lineLoads.length; i++) {
-    if (
-      isNaN(
-        document.getElementById(`loadSizeLeftInputLineLoadIndex${i}`)
-          .valueAsNumber
-      )
-    ) {
-      continue;
-    }
-    drawLineLoad(
-      lineLoads[i].startX,
-      lineLoads[i].length,
-      lineLoads[i].sizeLeft,
-      lineLoads[i].sizeRight,
-      lineLoads[i].startY,
-      lineLoads[i].color,
-      lineLoads[i].density
-    );
-  }
-  for (let j = 0; j < pointLoads.length; j++) {
-    if (
-      isNaN(
-        document.getElementById(`loadSizeInputPointLoadIndex${j}`).valueAsNumber
-      )
-    ) {
-      continue;
-    }
-    drawArrowForLoad(
-      pointLoads[j].X,
-      pointLoads[j].Y,
-      pointLoads[j].size,
-      pointLoads[j].color
-    );
-  }
-  addLineLoadLabel();
-  addPointLoadLabel();
-}
+
 
 function updateLineLoadStartY() {
   for (let j = 0; j < lineLoads.length; j++) {
@@ -1451,6 +1409,53 @@ function addPointLoadLabel() {
     ctx.fillText(`${loadSizeDecimal} kN`, x, y);
   }
 }
+
+// --------------- Update Load Drawings Function -----------------------
+
+function updateLoadDrawings() {
+  drawModel();
+  updateLineLoadStart();
+  updateLineLoadLength();
+  updatePointLoadX();
+  updatePointLoadY();
+  for (let i = 0; i < lineLoads.length; i++) {
+    if (
+      isNaN(
+        document.getElementById(`loadSizeLeftInputLineLoadIndex${i}`)
+          .valueAsNumber
+      )
+    ) {
+      continue;
+    }
+    drawLineLoad(
+      lineLoads[i].startX,
+      lineLoads[i].length,
+      lineLoads[i].sizeLeft,
+      lineLoads[i].sizeRight,
+      lineLoads[i].startY,
+      lineLoads[i].color,
+      lineLoads[i].density
+    );
+  }
+  for (let j = 0; j < pointLoads.length; j++) {
+    if (
+      isNaN(
+        document.getElementById(`loadSizeInputPointLoadIndex${j}`).valueAsNumber
+      )
+    ) {
+      continue;
+    }
+    drawArrowForLoad(
+      pointLoads[j].X,
+      pointLoads[j].Y,
+      pointLoads[j].size,
+      pointLoads[j].color
+    );
+  }
+  addLineLoadLabel();
+  addPointLoadLabel();
+}
+
 
 // function changeDecimals(id, value)
 
